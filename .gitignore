@@ -7,3 +7,4 @@ Homestead.yaml
 /.idea
 /.vscode
 node_modules
+.well-known/acme-challenge/configcheck

@@ -1,7 +1,7 @@
 <header>
-     <a class="header-img-a" href="https://stonkspizza.nl/"><img class="header-img" src="img/logo_bg.png" alt="logo"></a>
+     <a class="header-img-a" href="/"><img class="header-img" src="img/logo_bg.png" alt="logo"></a>
      <div id="header-links" class="header-links">
-          <a href="https://stonkspizza.nl/">Home</a>
+          <a href="/">Home</a>
           <a href="menu">Menu</a>
 
           <div onclick="opencartwinkelwagen()" id="open-cart" class="open-cart">

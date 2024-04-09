@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var url = "https://stonkspizza.nl/";
+    var url = "/";
     if (document.URL == url) {
         const links = document.getElementById("header-links");
         document.getElementById("open-cart").style.display = "none";
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function cardclicked() {
-    window.location.href = "https://stonkspizza.nl/menu";
+    window.location.href = "/menu";
 }
 
 function openpizza(button) {
@@ -43,7 +43,7 @@ function closecart() {
     cartPopup.style.opacity = "0";
     setTimeout(() => {
         cartPopup.style.display = "none";
-    }, 500); 
+    }, 500);
 }
 
 function closepizza() {
@@ -81,13 +81,13 @@ function addtocart(button) {
         price: pizzaPrice,
         size: pizzaSize,
         customization: pizzaCustomization,
-        quantity: parseInt(pizzaQuantity) 
+        quantity: parseInt(pizzaQuantity)
     };
     const popup = document.createElement('div');
     popup.classList.add('popup');
     popup.textContent = `Toegevoegd: ${pizza.quantity}x ${pizza.name}`;
     document.body.appendChild(popup);
-    
+
     setTimeout(() => {
         popup.classList.add('hidden')
         setTimeout(() => {
@@ -151,10 +151,10 @@ function updateCartDisplay() {
     const priceSummary = document.createElement("div");
     const orderbtn = document.createElement("div");
     orderbtn.classList.add("order-btn");
-    orderbtn.innerHTML = `<a href="https://stonkspizza.nl/bedankt">Bestel Nu</a>`;
+    orderbtn.innerHTML = `<a href="/bedankt">Bestel Nu</a>`;
     priceSummary.classList.add("price-summary");
     priceSummary.innerHTML = `<p>Totaalprijs: $${totalPrice.toFixed(2)}</p>`;
-    
+
     totalPriceContainer.innerHTML = "";
     totalPriceContainer.appendChild(priceSummary);
     totalPriceContainer.appendChild(orderbtn);

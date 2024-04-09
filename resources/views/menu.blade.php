@@ -45,24 +45,6 @@
             <input type="text" id="pizza-customization" placeholder="Typ hier de aanpassingen...">
             <button onclick="addtocart(this)">Toevoegen aan winkelwagen</button>
         </section>
-        <section id="cart-popup" class="shopping-cart">
-            <div class="cart">
-                <h1>Bestelling</h1>
-                <ul id="cart-items"></ul>
-            </div>
-            <div class="contact-info">
-                <h1>Contact Info</h1>
-                    
-                <button id="closecart" onclick="closecart()">Sluiten</button>
-            </div>
-            <div class="summary">
-                <h1>Summary</h1>
-                <div>
-                    <div id="summary-items"></div>
-                    <div id="total-price"></div>
-                </div>
-            </div>
-        </section>
     </main>
     @include('footer')
 </body>

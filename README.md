@@ -1,2 +1,2 @@
 # StonksPizza
-Stonks Pizza | Project 3
+ Stonks Pizza Website

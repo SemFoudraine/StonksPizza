@@ -21,6 +21,38 @@ function cardclicked() {
 }
 
 function openpizza(button) {
+    // Nieuw: Haal de hoeveelheid van de geselecteerde pizza op
+    const pizzaQuantityElement = document.querySelector('.pizza-card.selected .pizza-quantity');
+    const quantity = parseInt(pizzaQuantityElement.value, 10);
+
+    // Controleer of de hoeveelheid geldig is
+    if (!isValidQuantity(quantity)) {
+        const popup = document.createElement('div');
+        popup.classList.add('popup');
+        popup.innerHTML = `Voer een waarde in tussen 1 en 99 <span class="popup-close" style="cursor:pointer; padding: 0 5px;">&times;</span>`;
+        popup.style.backgroundColor = "red";
+        popup.style.color = "white";
+        popup.style.position = "fixed";
+        popup.style.top = "70px";
+        popup.style.right = "20px";
+        popup.style.padding = "10px";
+        popup.style.borderRadius = "5px";
+        popup.style.zIndex = "1000";
+        document.body.appendChild(popup);
+
+        // Sluitfunctie voor de popup
+        popup.querySelector('.popup-close').addEventListener('click', function () {
+            popup.style.opacity = "0";
+            popup.style.transition = "opacity 0.5s ease";
+            setTimeout(() => {
+                popup.remove();
+            }, 500); // Wacht op de animatie om te voltooien voordat de popup wordt verwijderd
+        });
+
+        return; // Stop de functie als de hoeveelheid niet geldig is
+    }
+
+    // De rest van de openpizza functie blijft ongewijzigd
     const pizzaPopup = document.getElementById("pizza-popup");
     const cartPopup = document.getElementById("cart-popup");
     pizzaPopup.style.display = "block";
@@ -54,11 +86,11 @@ function closepizza() {
     }, 500);
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const pizzaCards = document.querySelectorAll(".pizza-card");
-    pizzaCards.forEach(function(card) {
-        card.addEventListener("click", function() {
-            pizzaCards.forEach(function(card) {
+    pizzaCards.forEach(function (card) {
+        card.addEventListener("click", function () {
+            pizzaCards.forEach(function (card) {
                 card.classList.remove("selected");
             });
             card.classList.add("selected");
@@ -67,10 +99,19 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function addtocart(button) {
+    // Haal de hoeveelheid op van de input binnen de geselecteerde pizza-card
+    const pizzaQuantityElement = document.querySelector('.pizza-card.selected .pizza-quantity');
+    const quantity = parseInt(pizzaQuantityElement.value, 10);
+
+    // Controleer of de hoeveelheid geldig is
+    if (!isValidQuantity(quantity)) {
+        alert('Voer een waarde in tussen 1 en 99.');
+        return; // Stop de functie als de hoeveelheid niet geldig is
+    }
+
+    // Alles hieronder blijft ongewijzigd ten opzichte van de bestaande functie
     const pizzaSize = document.getElementById("pizza-size").value;
     const customization = document.getElementById("pizza-customization").value;
-    const pizzaQuantityElement = document.querySelector('.pizza-card.selected .pizza-quantity');
-    const pizzaQuantity = pizzaQuantityElement.value;
     const pizzaNameElement = document.querySelector('.pizza-card.selected .pizza-name');
     const pizzaName = pizzaNameElement.textContent;
     const pizzaPriceElement = document.querySelector('.pizza-card.selected .pizza-price');
@@ -78,10 +119,10 @@ function addtocart(button) {
     const pizzaCustomization = customization.trim() === '' ? 'Niks' : customization;
     const pizza = {
         name: pizzaName,
-        price: pizzaPrice,
         size: pizzaSize,
         customization: pizzaCustomization,
-        quantity: parseInt(pizzaQuantity)
+        quantity: quantity, // Gebruik de gevalideerde hoeveelheid
+        price: pizzaPrice
     };
     const popup = document.createElement('div');
     popup.classList.add('popup');
@@ -115,7 +156,6 @@ function addtocart(button) {
     closepizza();
     updateCartDisplay();
 }
-
 
 function updateCartDisplay() {
     const cartItemsContainer = document.getElementById("cart-items");
@@ -175,6 +215,14 @@ function updatePizza(index) {
     updateCartDisplay();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     updateCartDisplay();
 });
+
+
+//
+
+function isValidQuantity(quantity) {
+    return quantity >= 1 && quantity <= 99;
+}
+

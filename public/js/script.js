@@ -189,8 +189,6 @@ function updateCartDisplay() {
     cartCounter.textContent = totalPizzaCount;
     const priceSummary = document.createElement("div");
     const orderbtn = document.createElement("div");
-    orderbtn.classList.add("order-btn");
-    orderbtn.innerHTML = `<a href="/bedankt">Bestel Nu</a>`;
     priceSummary.classList.add("price-summary");
     priceSummary.innerHTML = `<p>Totaalprijs: $${totalPrice.toFixed(2)}</p>`;
 

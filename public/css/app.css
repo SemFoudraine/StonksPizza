@@ -208,6 +208,7 @@ header {
 }
 
 /* -------------------------------------------------------------------NOAH CODE: -------------------------------------------------------------------*/
+
 @keyframes slideIn {
     0% {
         top: -100%;
@@ -235,11 +236,11 @@ header {
     margin-right: auto;
     padding: 10px;
     width: min-content;
+    background-color: #E6002E !important;
     animation: slideInbtn 1.5s ease;
-    background-color: transparent;
-    border: lightcoral 3px solid;
+    border: #E6002E 3px solid;
     border-radius: 10px;
-
+    color: white !important;
 }
 
 .shopping-cart > div{
@@ -271,13 +272,7 @@ header {
 }
 .pizzaamount{
     width: 35px;
-    
-}
-.order-btn{
-    background-color: transparent;
-    border: lightgreen 3px solid;
-    border-radius: 10px;
-    padding: 10px;
+
 }
 .summary > div{
     height: 85%;
@@ -410,6 +405,7 @@ header {
     justify-content: space-around;
     flex-wrap: wrap;
     flex-direction: row;
+    margin-top: 13.3rem;
 }
 .pizza-container {
     padding-top: 5%;

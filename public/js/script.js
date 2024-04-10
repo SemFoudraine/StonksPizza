@@ -37,7 +37,6 @@ function openpizza(button) {
         popup.style.right = "20px";
         popup.style.padding = "10px";
         popup.style.borderRadius = "5px";
-        popup.style.zIndex = "1000";
         document.body.appendChild(popup);
 
         // Sluitfunctie voor de popup

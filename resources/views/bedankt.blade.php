@@ -1,161 +1,81 @@
-<h1>PROGRESS BAR</h1>
-<Style>
-body {
-  font-family: 'Roboto Condensed';
-  height: 100vh;
-  width: 100vw;
-  padding: 0;
-  background-image: radial-gradient(#051B23, shade(#051B23, 25));
-}
+<!DOCTYPE html>
+<html lang="nl">
 
-h1 {
-  color: #fcb034;
-  text-align: center;
-  font-size: 7vw;
-  margin-top: 10vh;
-  letter-spacing: 3px;
-  position: absolute;
-  width: 100%;
-}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bedankt voor je bestelling</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-.icon {
-  display: inline-block;
-	width: 1.5em;
-	height: 1.5em;
-	fill: none;
-}
+        .container {
+            background-color: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 400px;
+            text-align: center;
+        }
 
-.hidden {
-  display: none;
-}
+        .map-container {
+            margin-bottom: 20px;
+        }
 
-.progress {
-  display: flex;
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  margin: 0 0 0 10%;
-}
-.step {
-  flex-grow: 1;
-  position: relative;
-}
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
 
-.step-progress {
-  width: 100%;
-  height: 0.25em;
-  background: #fcb034;
-}
-.icon-wrapper {
-  text-align: center;
-  display: inline-block;
-}
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.step.done .step-progress:after {
-  position: absolute;
-  content: '';
-  height: 0.25em;
-  width: 0;
-  background-color: #0087B3;
-  animation: growLine 1s linear forwards;
-}
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
 
-.icon-checkmark {
-  position: absolute;
-  top: -0.55em;
-  left: -0.125em;
-  border: 0.125em solid #fcb034;
-  background: #051B23;
-  width: 1em;
-  height: 1em;
-  border-radius: 50%;
-  padding: 0.125em;
-  border-radius: 50%;
-  transition: all 0.25s linear;
-}
-.step.done .icon-checkmark {
-  background: #0087B3;
-  border-color: #0087B3;
-}
-
-.icon-checkmark .path1 {
-  stroke: #aaa;
-  stroke-width: 4;
-  stroke-linecap: square;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  fill: empty;
-}
-.step.done .icon-checkmark .path1 {
-  animation: dash 5s linear forwards;
-  stroke: #fcb034;
-}
-
-.step-text {
-  position: relative;
-  margin-left: -50%;
-  letter-spacing: 1px;
-  font-weight: bold;
-  color: #aaa;
-  margin-top: 0;
-  opacity: 0;
-}
-.step.done .step-text {
-  color: #0087B3;
-  animation: dropText 0.5s linear forwards;
-}
-
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes growLine {
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes dropText {
-  to {
-    padding-top: 1em;
-    opacity: 1;
-  }
-}
-</Style>
-<section>
-<div class="progress">
-  <div class="step">
-    <div class="step-progress"></div>
-    <div class="icon-wrapper">
-      <svg class="icon icon-checkmark" viewBox="0 0 32 32"><path class="path1" d="M27 4l-15 15-7-7-5 5 12 12 20-20z"></path>  </svg>
-      <div class="step-text">ENROLLED</div>
+<body>
+    <div class="container">
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2485.5400829235423!2d5.494135711715193!3d51.46660011356612!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c6d8d46a1fd9a7%3A0x2683f0238844f87a!2sSumma%20College!5e0!3m2!1snl!2snl!4v1712739386876!5m2!1snl!2snl"
+                style="border:0; width:100%; height:200px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="message">
+            <h2>Je bestelling wordt zo bezorgd</h2>
+            <p>Orient Express heeft bevestigd dat je bestelling snel bezorgd wordt.</p>
+        </div>
+        <div class="button-container">
+            <button class="button" data-tip="5">5% fooi</button>
+            <button class="button" data-tip="10">10% fooi</button>
+            <button class="button" data-tip="15">15% fooi</button>
+        </div>
+        <div class="payment-method">
+            <h3>Kies jouw betaalmethode</h3>
+            <!-- Betaalmethode selectie zou hier komen. -->
+        </div>
     </div>
-  </div>
-  <div class="step">
-    <div class="step-progress"></div>
-    <div class="icon-wrapper">
-      <svg class="icon icon-checkmark" viewBox="0 0 32 32"><path class="path1" d="M27 4l-15 15-7-7-5 5 12 12 20-20z"></path>  </svg>
-      <div class="step-text">APPLIED</div>
-    </div>
-  </div>
-  <div class="step">
-    <div class="step-progress"></div>
-    <div class="icon-wrapper">
-      <svg class="icon icon-checkmark" viewBox="0 0 32 32"><path class="path1" d="M27 4l-15 15-7-7-5 5 12 12 20-20z"></path>  </svg>
-      <div class="step-text">CONFIRMED</div>
-    </div>
-  </div>
-  <div class="step">
-    <div class="icon-wrapper">
-      <svg class="icon icon-checkmark" viewBox="0 0 32 32"><path class="path1" d="M27 4l-15 15-7-7-5 5 12 12 20-20z"></path>  </svg>
-      <div class="step-text">DONE!</div>
-    </div>
-  </div>
-</div>
+</body>
 
-</section>
-
+</html>

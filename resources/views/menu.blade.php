@@ -25,7 +25,7 @@
                             <p class="pizza-price">${{ $pizza->price }}</p>
                             <label for="pizza-quantity">Aantal:</label>
                             <input type="number" class="pizza-quantity" id="pizza-quantity" value="1" min="1" max="99" data-quantity="{{ $pizza->quantity }}">
-                            <button onclick="openpizza(this)" class="order-button" data-pizza="{{ $pizza->name }}">Order Now</button>
+                            <button onclick="openpizza(this)" class="order-button" data-pizza="{{ $pizza->name }}">Bestel Nu</button>
                         </div>
                     </div>
                     @endforeach

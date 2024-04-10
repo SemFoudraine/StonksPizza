@@ -134,7 +134,7 @@ function updateCartDisplay() {
         cartItem.innerHTML = `<h1>${pizza.name}</h1>
             <p>Size: ${pizza.size}</p>
             <p>Aanpassingen: ${pizza.customization}</p>
-            <p>Prijs: ${pizza.price} - Aantal: <input class="pizzaamount" type="number" name="${index}_size" value="${pizza.quantity}" id="${index}_size"></p>
+            <p>Prijs: ${pizza.price} - Aantal: <input class="pizzaamount" min="1" type="number" name="${index}_size" value="${pizza.quantity}" id="${index}_size"></p>
             <button onclick="updatePizza(${index})">Update</button>
             <button onclick="deletePizza(${index})">Verwijder</button>`;
         cartItemsContainer.appendChild(cartItem);

@@ -35,6 +35,7 @@
             <div>
                 <div id="summary-items"></div>
                 <div id="total-price"></div>
+               <a href="/bedankt"><button class="order-button" >Bestel Nu</button></a>
             </div>
         </div>
     </section>

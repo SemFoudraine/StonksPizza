@@ -82,3 +82,5 @@
         </div>
     </form>
 </x-guest-layout>
+<br>
+@include('footer')

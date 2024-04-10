@@ -7,6 +7,7 @@
         <link rel="stylesheet" href="css/app.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" />
         <script src="js/script.js"></script>
+        <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->

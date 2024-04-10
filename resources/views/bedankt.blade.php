@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,6 +52,19 @@
         .button:hover {
             background-color: #45a049;
         }
+
+        .payment-method {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.7rem;
+}
+
+.payment-method img {
+    max-width: 65px;
+    height: auto;
+}
+
     </style>
 </head>
 
@@ -71,11 +83,12 @@
             <button class="button" data-tip="10">10% fooi</button>
             <button class="button" data-tip="15">15% fooi</button>
         </div>
+        <h3>Kies jouw betaalmethode</h3>
         <div class="payment-method">
-            <h3>Kies jouw betaalmethode</h3>
-            <!-- Betaalmethode selectie zou hier komen. -->
+            <img class="header-img" src="img/paypal.png" alt="logo">
+            <img class="header-img" src="img/ideal.png" alt="logo">
+            <img class="header-img" src="img/contant.png" alt="logo">
         </div>
     </div>
 </body>
-
 </html>

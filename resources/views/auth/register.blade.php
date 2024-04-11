@@ -44,10 +44,18 @@
 
         <!-- Adres -->
         <div class="mt-4">
-            <x-input-label for="adres" :value="__('Adres + Huisnummer')" />
+            <x-input-label for="adres" :value="__('Adres')" />
             <x-text-input id="adres" class="block mt-1 w-full" type="text" name="adres" :value="old('adres')"
                 required autofocus autocomplete="adres" />
             <x-input-error :messages="$errors->get('adres')" class="mt-2" />
+        </div>
+
+        <!-- Huisnummer -->
+        <div class="mt-4">
+            <x-input-label for="huisnummer" :value="__('Huisnummer')" />
+            <x-text-input id="huisnummer" class="block mt-1 w-full" type="text" name="huisnummer" :value="old('huisnummer')"
+                required autofocus autocomplete="huisnummer" />
+            <x-input-error :messages="$errors->get('huisnummer')" class="mt-2" />
         </div>
 
         <!-- Password -->

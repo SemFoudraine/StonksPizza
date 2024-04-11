@@ -38,6 +38,7 @@ class RegisteredUserController extends Controller
             'woonplaats' => ['required', 'string'],
             'postcode' => ['required', 'string'],
             'adres' => ['required', 'string'],
+            'huisnummer' => ['required', 'string'],
         ]);
 
         $user = User::create([
@@ -48,6 +49,7 @@ class RegisteredUserController extends Controller
             'woonplaats' => $request->woonplaats,
             'postcode' => $request->postcode,
             'adres' => $request->adres,
+            'huisnummer' => $request->huisnummer,
         ]);
 
         event(new Registered($user));

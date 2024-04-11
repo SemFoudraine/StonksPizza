@@ -40,7 +40,7 @@
                     placeholder="Telefoonnummer" style="{{ $inputStyle }}">
                 <input type="text" id="zip_code" name="zip_code" value="{{ auth()->user()->postcode ?? '' }}"
                     placeholder="Postcode" style="{{ $inputStyle }}" onchange="fetchAddress()">
-                <input type="text" id="house_number" name="house_number" placeholder="Huisnummer"
+                <input type="text" id="house_number" name="house_number" value="{{ auth()->user()->huisnummer ?? '' }}" placeholder="Huisnummer"
                     style="{{ $inputStyle }}" onchange="fetchAddress()">
                 <input type="text" id="city" name="city" value="{{ auth()->user()->woonplaats ?? '' }}"
                     placeholder="Woonplaats" style="{{ $inputStyle }}">

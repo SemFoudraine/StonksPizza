@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\AddressController;
-
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +23,7 @@ Route::get('/', function () {
 
 // web.php of api.php
 Route::get('/api/fetch-address', [AddressController::class, 'fetchAddress']);
+Route::get('/api/fetch-address', [RegisteredUserController::class, 'fetchAddress']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

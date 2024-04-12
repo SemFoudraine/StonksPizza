@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
@@ -34,7 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 Route::get('/menu', [PizzaController::class, 'index'])->name('menu');
 Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('woonplaats')->nullable();
             $table->string('postcode')->nullable();
             $table->string('adres')->nullable();
+            $table->string('huisnummer')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

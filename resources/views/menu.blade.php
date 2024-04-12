@@ -28,12 +28,13 @@
                             <button onclick="openpizza(this)" class="order-button" data-pizza="{{ $pizza->name }}">Bestel Nu</button>
                         </div>
                     </div>
+                    @endforeach
                 </div>
-                @endforeach
+            </div>
         </section>
         <section id="pizza-popup" class="pizza-popup">
             <span onclick="closepizza()" class="close-popup">x</span>
-            <h2 id="pizza-popup-title">Pizza Naam</h2>
+            <h2 id="pizza-popup-title">Pizza Naamm</h2>
             <label for="pizza-size">Formaat:</label>
             <select id="pizza-size">
                 <option value="small">Small</option>
@@ -46,48 +47,6 @@
         </section>
     </main>
     @include('footer')
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Voeg een event listener toe voor het indienen van het bestelformulier
-            document.querySelectorAll('.order-form').forEach(form => {
-                form.addEventListener('submit', function (event) {
-                    event.preventDefault(); // Voorkom standaardgedrag van het formulier (paginaherladen)
-
-                    // Haal pizza-ID op uit het formulier
-                    const pizzaId = this.dataset.pizzaId;
-
-                    // Doe een asynchrone POST-request naar de server
-                    fetch('{{ route('place.order') }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Voeg de CSRF-token toe aan de headers
-                        },
-                        body: JSON.stringify({ // Verzend de gegevens van het formulier als JSON
-                            pizza_id: pizzaId
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json(); // Verwerk het JSON-antwoord
-                        } else {
-                            throw new Error('Bestelling kon niet worden geplaatst');
-                        }
-                    })
-                    .then(data => {
-                        // Redirect naar de bedankpagina met het ordernummer
-                        window.location.href = '/bedankt?order_number=' + data.order_number;
-                    })
-                    .catch(error => {
-                        console.error('Er is een fout opgetreden bij het plaatsen van de bestelling:', error);
-                        // Toon een foutmelding aan de gebruiker
-                        alert('Er is een fout opgetreden bij het plaatsen van de bestelling. Probeer het later opnieuw.');
-                    });
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

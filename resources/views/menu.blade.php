@@ -34,12 +34,12 @@
         </section>
         <section id="pizza-popup" class="pizza-popup">
             <span onclick="closepizza()" class="close-popup">x</span>
-            <h2 id="pizza-popup-title">Pizza Naamm</h2>
+            <h2 id="pizza-popup-title">Pizza Naam</h2>
             <label for="pizza-size">Formaat:</label>
             <select id="pizza-size">
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
+                @foreach ($pizza_sizes as $size)
+                <option value="{{ $size }}">{{ ucfirst($size) }}</option>
+                @endforeach
             </select>
             <label for="pizza-customization">Aanpassingen:</label>
             <input type="text" id="pizza-customization" placeholder="Typ hier de aanpassingen...">

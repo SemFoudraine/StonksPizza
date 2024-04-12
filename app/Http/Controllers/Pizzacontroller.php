@@ -9,13 +9,18 @@ use App\Models\Pizza;
 class Pizzacontroller extends Controller
 {
 
+
+
     public function index()
     {
-        $pizzas = Pizza::all();
-        return view('menu', ['pizzas' => $pizzas]);
+        $pizzas = Pizza::all(); // Haal alle pizza's op uit de database
+        $pizza_sizes = ['small', 'medium', 'large']; // Definieer de beschikbare maten
+
+        return view('menu', compact('pizzas', 'pizza_sizes')); // Geef zowel $pizzas als $pizza_sizes door aan de view
     }
 
-    public function bedankt() 
+
+    public function bedankt()
     {
         return view('bedankt');
     }

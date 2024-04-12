@@ -36,8 +36,8 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/menu', [PizzaController::class, 'index'])->name('menu');
 Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
-Route::post('/bestelling-toevoegen', 'BestellingController@voegBestellingToe');
-Route::get('/bedankt', 'BestellingController@bedankt')->name('bedankt');
+
+
 
 
 require __DIR__.'/auth.php';

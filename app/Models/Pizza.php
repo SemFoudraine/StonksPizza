@@ -11,5 +11,5 @@ use Laravel\Sanctum\HasApiTokens;
 
 class Pizza extends Model
 {
-    protected $fillable = ['name', 'description', 'image', 'price', 'calories',];
+    protected $fillable = ['name', 'description', 'image', 'price', 'calories', 'sizes'];
 }

@@ -18,6 +18,10 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
+        colors: {
+            'stonks-groen' : '#3bb95b',
+            'stonks-groen2' : '#009927',
+        },
     },
 
     plugins: [

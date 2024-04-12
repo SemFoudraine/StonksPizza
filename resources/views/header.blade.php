@@ -3,12 +3,22 @@
         $inputStyle =
             'width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;';
     @endphp
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <a class="header-img-a" href="/"><img class="header-img" src="img/logo_bg.png" alt="logo"></a>
     <div id="header-links" class="header-links">
+        {{-- Login --}}
         <a href="/">Home</a>
         <a href="menu">Menu</a>
+        @auth
+            @php
+                $user = Auth::user();
+            @endphp
+            @if ($user->hasRole('medewerker') || $user->hasRole('manager') || $user->hasRole('koerier'))
+                <a href="/beheer">Beheer</a>
+            @endif
+        @endauth
 
         <div onclick="opencartwinkelwagen()" id="open-cart" class="open-cart">
             <a style="display: flex;" class="open-cart"><span class="material-symbols-outlined">shopping_cart</span></a>

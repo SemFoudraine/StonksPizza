@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -6,6 +7,8 @@ use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\beheerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\WerknemersController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +47,13 @@ Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
 
 // ------------------------- Role Routes ------------------------- \\
 Route::get('/beheer', [BeheerController::class, 'index'])->name('beheer')->middleware('role:medewerker,manager,koerier');
+Route::get('/werknemers', [WerknemersController::class, 'index'])->name('werknemers')->middleware('role:manager');
 
+Route::get('/search-users', [UserController::class, 'search'])->name('users.search')->middleware('role:manager');
+Route::post('/add-user-to-role', [UserController::class, 'addToRole'])->name('users.add-to-role')->middleware('role:manager');
+// web.php
+Route::delete('/remove-user-from-role', [WerknemersController::class, 'removeFromRole'])
+    ->name('remove.user.from.role')
+    ->middleware('role:manager');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

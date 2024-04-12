@@ -6,6 +6,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="js/script.js"></script>
     <a class="header-img-a" href="/"><img class="header-img" src="img/logo_bg.png" alt="logo"></a>
     <div id="header-links" class="header-links">
         {{-- Login --}}

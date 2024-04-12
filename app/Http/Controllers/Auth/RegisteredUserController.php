@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -38,6 +40,7 @@ class RegisteredUserController extends Controller
             'woonplaats' => ['required', 'string'],
             'postcode' => ['required', 'string'],
             'adres' => ['required', 'string'],
+            'huisnummer' => ['required', 'string'],
         ]);
 
         $user = User::create([
@@ -48,6 +51,7 @@ class RegisteredUserController extends Controller
             'woonplaats' => $request->woonplaats,
             'postcode' => $request->postcode,
             'adres' => $request->adres,
+            'huisnummer' => $request->huisnummer,
         ]);
 
         event(new Registered($user));
@@ -55,5 +59,36 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function fetchAddress(Request $request)
+    {
+        $client = new Client();
+
+        // Zorg ervoor dat de postcode en het huisnummer correct zijn geformatteerd
+        $postcode = strtoupper(str_replace(' ', '', $request->query('postcode')));
+        $number = $request->query('number');
+
+        try {
+            $response = $client->request('GET', "https://postcode.tech/api/v1/postcode/full?postcode=$postcode&number=$number", [
+                'headers' => [
+                    'Authorization' => 'Bearer 4bd4a64d-fdb5-4cc3-8bff-971740333e40'
+                ]
+            ]);
+
+            $data = json_decode($response->getBody()->getContents(), true);
+
+            return response()->json([
+                'street' => $data['street'] ?? null,
+                'city' => $data['city'] ?? null,
+                'municipality' => $data['municipality'] ?? null,
+                'province' => $data['province'] ?? null,
+                'latitude' => $data['geo']['lat'] ?? null,
+                'longitude' => $data['geo']['lon'] ?? null,
+            ]);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            Log::error("Fout bij het ophalen van adres: " . $e->getMessage());
+            return response()->json(['error' => 'Er is iets misgegaan bij het ophalen van de adresgegevens.'], 500);
+        }
     }
 }

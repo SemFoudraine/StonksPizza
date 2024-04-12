@@ -1,9 +1,10 @@
 <?php
-
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PizzaController;
-
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ Route::get('/', function () {
     return view('index');
 });
 
+// web.php of api.php
+Route::get('/api/fetch-address', [AddressController::class, 'fetchAddress']);
+Route::get('/api/fetch-address', [RegisteredUserController::class, 'fetchAddress']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -30,9 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
-
 Route::get('/menu', [PizzaController::class, 'index'])->name('menu');
 Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
 Route::post('/bestelling-toevoegen', 'BestellingController@voegBestellingToe');

@@ -34,7 +34,7 @@
         </section>
         <section id="pizza-popup" class="pizza-popup">
             <span onclick="closepizza()" class="close-popup">x</span>
-            <h2 id="pizza-popup-title">Pizza Naam</h2>
+            <h2 id="pizza-popup-title">Pizza Naamm</h2>
             <label for="pizza-size">Formaat:</label>
             <select id="pizza-size">
                 <option value="small">Small</option>

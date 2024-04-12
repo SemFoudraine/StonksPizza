@@ -21,17 +21,9 @@
         <!-- Telefoonnummer -->
         <div class="mt-4">
             <x-input-label for="phone" :value="__('Telefoonnummer')" />
-            <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')" required
-                autofocus autocomplete="phone" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')"
+                required autofocus autocomplete="phone" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-        </div>
-
-        <!-- Woonplaats -->
-        <div class="mt-4">
-            <x-input-label for="woonplaats" :value="__('Woonplaats')" />
-            <x-text-input id="woonplaats" class="block mt-1 w-full" type="text" name="woonplaats" :value="old('woonplaats')"
-                required autofocus autocomplete="woonplaats" />
-            <x-input-error :messages="$errors->get('woonplaats')" class="mt-2" />
         </div>
 
         <!-- Postcode -->
@@ -42,9 +34,25 @@
             <x-input-error :messages="$errors->get('postcode')" class="mt-2" />
         </div>
 
+        <!-- Huisnummer -->
+        <div class="mt-4">
+            <x-input-label for="huisnummer" :value="__('Huisnummer')" />
+            <x-text-input id="huisnummer" class="block mt-1 w-full" type="text" name="huisnummer" :value="old('huisnummer')"
+                required autofocus autocomplete="huisnummer" />
+            <x-input-error :messages="$errors->get('huisnummer')" class="mt-2" />
+        </div>
+
+        <!-- Woonplaats -->
+        <div class="mt-4">
+            <x-input-label for="woonplaats" :value="__('Woonplaats')" />
+            <x-text-input id="woonplaats" class="block mt-1 w-full" type="text" name="woonplaats" :value="old('woonplaats')"
+                required autofocus autocomplete="woonplaats" />
+            <x-input-error :messages="$errors->get('woonplaats')" class="mt-2" />
+        </div>
+
         <!-- Adres -->
         <div class="mt-4">
-            <x-input-label for="adres" :value="__('Adres + Huisnummer')" />
+            <x-input-label for="adres" :value="__('Adres')" />
             <x-text-input id="adres" class="block mt-1 w-full" type="text" name="adres" :value="old('adres')"
                 required autofocus autocomplete="adres" />
             <x-input-error :messages="$errors->get('adres')" class="mt-2" />
@@ -84,3 +92,50 @@
 </x-guest-layout>
 <br>
 @include('footer')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postcodeField = document.getElementById('postcode');
+        const huisnummerField = document.getElementById('huisnummer');
+
+        function fetchAddress() {
+            const postcode = postcodeField.value.trim();
+            const huisnummer = huisnummerField.value.trim();
+
+            if (!postcode || !huisnummer) {
+                console.error('Postcode en huisnummer moeten ingevuld zijn.');
+                return; // Doe niets als postcode of huisnummer leeg is
+            }
+
+            fetch(`/api/fetch-address?postcode=${postcode}&number=${huisnummer}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Netwerkrespons was niet ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error('Fout bij het ophalen van de gegevens:', data.error);
+                        return;
+                    }
+                    // Update de velden met de opgehaalde data
+                    document.getElementById('adres').value = data.street || '';
+                    document.getElementById('woonplaats').value = data.city || '';
+                    document.getElementById('postcode').value = postcode; // Postcode is al bekend
+                    document.getElementById('huisnummer').value = huisnummer; // Huisnummer is al bekend
+                    // Indien nodig, update ook latitude, longitude, en provincie velden
+                    document.getElementById('latitude').value = data.latitude || '';
+                    document.getElementById('longitude').value = data.longitude || '';
+                    document.getElementById('province').value = data.province || '';
+                })
+                .catch(error => {
+                    console.error('Fout bij het ophalen van adres:', error);
+                });
+        }
+
+        // Event listeners voor het ophalen van adres bij wijziging
+        postcodeField.addEventListener('input', fetchAddress);
+        huisnummerField.addEventListener('input', fetchAddress);
+    });
+</script>

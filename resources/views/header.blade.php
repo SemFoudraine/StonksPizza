@@ -32,18 +32,21 @@
             style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">Contact Informatie</h1>
             <form>
-                <input type="text" name="name" value="{{ auth()->user()->name ?? '' }}"
+                <input type="text" id="name" name="name" value="{{ auth()->user()->name ?? '' }}"
                     placeholder="Voor- en Achternaam" style="{{ $inputStyle }}">
-                <input type="email" name="email" value="{{ auth()->user()->email ?? '' }}" placeholder="Email"
-                    style="{{ $inputStyle }}">
-                <input type="tel" name="phone" value="{{ auth()->user()->phone ?? '' }}"
+                <input type="email" id="email" name="email" value="{{ auth()->user()->email ?? '' }}"
+                    placeholder="Email" style="{{ $inputStyle }}">
+                <input type="tel" id="phone" name="phone" value="{{ auth()->user()->phone ?? '' }}"
                     placeholder="Telefoonnummer" style="{{ $inputStyle }}">
-                <input type="text" name="woonplaats" value="{{ auth()->user()->woonplaats ?? '' }}"
+                <input type="text" id="zip_code" name="zip_code" value="{{ auth()->user()->postcode ?? '' }}"
+                    placeholder="Postcode" style="{{ $inputStyle }}" onchange="fetchAddress()">
+                <input type="text" id="house_number" name="house_number"
+                    value="{{ auth()->user()->huisnummer ?? '' }}" placeholder="Huisnummer"
+                    style="{{ $inputStyle }}" onchange="fetchAddress()">
+                <input type="text" id="city" name="city" value="{{ auth()->user()->woonplaats ?? '' }}"
                     placeholder="Woonplaats" style="{{ $inputStyle }}">
-                <input type="text" name="postcode" value="{{ auth()->user()->postcode ?? '' }}"
-                    placeholder="Postcode" style="{{ $inputStyle }}">
-                <input type="text" name="adres" value="{{ auth()->user()->adres ?? '' }}"
-                    placeholder="Adres + Huisnummer" style="{{ $inputStyle }}">
+                <input type="text" id="street" name="street" value="{{ auth()->user()->adres ?? '' }}"
+                    placeholder="Straatnaam" style="{{ $inputStyle }}">
             </form>
             @guest
                 <p style="margin-top: 20px;">Je bent niet ingelogd. <a href="{{ route('login') }}"
@@ -57,9 +60,58 @@
             <h1>Summary</h1>
             <div>
                 <div id="summary-items"></div>
-                <div id="total-price"></div>
-                <a href="/bedankt"><button class="order-button">Bestel Nu</button></a>
+                <div class="test" style="position: fixed; margin-top: 8rem;">
+                    <p id="total-price"></p>
+                    <a href="/bedankt"><button class="order-button">Bestel Nu</button></a>
+                </div>
             </div>
         </div>
     </section>
 </header>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postcodeField = document.getElementById('zip_code');
+        const huisnummerField = document.getElementById('house_number');
+
+        function fetchAddress() {
+            const postcode = postcodeField.value.trim();
+            const huisnummer = huisnummerField.value.trim();
+
+            if (!postcode || !huisnummer) {
+                console.error('Postcode en huisnummer moeten ingevuld zijn.');
+                return; // Doe niets als postcode of huisnummer leeg is
+            }
+
+            fetch(`/api/fetch-address?postcode=${postcode}&number=${huisnummer}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Netwerkrespons was niet ok.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        console.error('Fout bij het ophalen van de gegevens:', data.error);
+                        return;
+                    }
+                    // Update de velden met de opgehaalde data
+                    document.getElementById('street').value = data.street || '';
+                    document.getElementById('city').value = data.city || '';
+                    document.getElementById('zip_code').value = postcode; // Postcode is al bekend
+                    document.getElementById('house_number').value = huisnummer; // Huisnummer is al bekend
+                    // Indien nodig, update ook latitude, longitude, en provincie velden
+                    document.getElementById('latitude').value = data.latitude || '';
+                    document.getElementById('longitude').value = data.longitude || '';
+                    document.getElementById('province').value = data.province || '';
+                })
+                .catch(error => {
+                    console.error('Fout bij het ophalen van adres:', error);
+                });
+        }
+
+        // Event listeners voor het ophalen van adres bij wijziging
+        postcodeField.addEventListener('input', fetchAddress);
+        huisnummerField.addEventListener('input', fetchAddress);
+    });
+</script>

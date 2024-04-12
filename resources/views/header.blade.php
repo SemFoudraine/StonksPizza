@@ -40,7 +40,8 @@
                     placeholder="Telefoonnummer" style="{{ $inputStyle }}">
                 <input type="text" id="zip_code" name="zip_code" value="{{ auth()->user()->postcode ?? '' }}"
                     placeholder="Postcode" style="{{ $inputStyle }}" onchange="fetchAddress()">
-                <input type="text" id="house_number" name="house_number" value="{{ auth()->user()->huisnummer ?? '' }}" placeholder="Huisnummer"
+                <input type="text" id="house_number" name="house_number"
+                    value="{{ auth()->user()->huisnummer ?? '' }}" placeholder="Huisnummer"
                     style="{{ $inputStyle }}" onchange="fetchAddress()">
                 <input type="text" id="city" name="city" value="{{ auth()->user()->woonplaats ?? '' }}"
                     placeholder="Woonplaats" style="{{ $inputStyle }}">
@@ -59,8 +60,10 @@
             <h1>Summary</h1>
             <div>
                 <div id="summary-items"></div>
-                <div id="total-price"></div>
-                <a href="/bedankt"><button class="order-button">Bestel Nu</button></a>
+                <div class="test" style="position: fixed; margin-top: 8rem;">
+                    <p id="total-price"></p>
+                    <a href="/bedankt"><button class="order-button">Bestel Nu</button></a>
+                </div>
             </div>
         </div>
     </section>

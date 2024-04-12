@@ -14,23 +14,25 @@
     @include('header')
     <main>
         <section>
-            <div class="container">
-                <div class="pizza-container">
-                    @foreach ($pizzas as $pizza)
-                    <div class="pizza-card">
-                        <img src="img/{{ $pizza->image }}" alt="{{ $pizza->name }}">
-                        <div class="pizza-details">
-                            <h2 class="pizza-name">{{ $pizza->name }}</h2>
-                            <p class="pizza-description">{{ $pizza->description }}</p>
-                            <p class="pizza-price">${{ $pizza->price }}</p>
-                            <label for="pizza-quantity">Aantal:</label>
-                            <input type="number" class="pizza-quantity" id="pizza-quantity" value="1" min="1" max="99" data-quantity="{{ $pizza->quantity }}">
-                            <button onclick="openpizza(this)" class="order-button" data-pizza="{{ $pizza->name }}">Bestel Nu</button>
-                        </div>
+            <div class="pizza-container">
+                @foreach ($pizzas as $pizza)
+                <div class="pizza-card">
+                    <img src="img/{{ $pizza->image }}" alt="{{ $pizza->name }}">
+                    <div class="pizza-details">
+                        <h2 class="pizza-name">{{ $pizza->name }}</h2>
+                        <p class="pizza-description">{{ $pizza->description }}</p>
+                        <p class="pizza-price">${{ $pizza->price }}</p>
+                        <label for="pizza-quantity">Aantal:</label>
+                        <input type="number" class="pizza-quantity" id="pizza-quantity" value="1" min="1" max="99" data-quantity="{{ $pizza->quantity }}">
+                        <!-- Voeg het bestelformulier toe voor elke pizza -->
+                        <form id="order-form-{{ $pizza->id }}" class="order-form" data-pizza-id="{{ $pizza->id }}">
+                            @csrf <!-- Voeg een CSRF-token toe voor beveiliging -->
+                            <input type="hidden" name="pizza_id" value="{{ $pizza->id }}"> <!-- Voeg een verborgen veld toe om de pizza-ID door te geven -->
+                            <button type="submit" class="order-button">Bestel Nu</button>
+                        </form>
                     </div>
-                    @endforeach
                 </div>
-            </div>
+                @endforeach
         </section>
         <section id="pizza-popup" class="pizza-popup">
             <span onclick="closepizza()" class="close-popup">x</span>
@@ -47,6 +49,48 @@
         </section>
     </main>
     @include('footer')
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Voeg een event listener toe voor het indienen van het bestelformulier
+            document.querySelectorAll('.order-form').forEach(form => {
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault(); // Voorkom standaardgedrag van het formulier (paginaherladen)
+
+                    // Haal pizza-ID op uit het formulier
+                    const pizzaId = this.dataset.pizzaId;
+
+                    // Doe een asynchrone POST-request naar de server
+                    fetch('{{ route('place.order') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Voeg de CSRF-token toe aan de headers
+                        },
+                        body: JSON.stringify({ // Verzend de gegevens van het formulier als JSON
+                            pizza_id: pizzaId
+                        })
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json(); // Verwerk het JSON-antwoord
+                        } else {
+                            throw new Error('Bestelling kon niet worden geplaatst');
+                        }
+                    })
+                    .then(data => {
+                        // Redirect naar de bedankpagina met het ordernummer
+                        window.location.href = '/bedankt?order_number=' + data.order_number;
+                    })
+                    .catch(error => {
+                        console.error('Er is een fout opgetreden bij het plaatsen van de bestelling:', error);
+                        // Toon een foutmelding aan de gebruiker
+                        alert('Er is een fout opgetreden bij het plaatsen van de bestelling. Probeer het later opnieuw.');
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -26,13 +26,20 @@ class UserController extends Controller
             return response()->json(['error' => 'Gebruiker of rol niet gevonden.'], 404);
         }
 
-        // Controleer of de gebruiker de rol al heeft
         if ($user->roles()->where('role_id', $role->id)->exists()) {
             return response()->json(['error' => 'Gebruiker heeft deze rol al.'], 409);
         }
 
-        // Voeg de rol toe als deze nog niet bestaat
         $user->roles()->attach($role);
-        return response()->json(['success' => 'Gebruiker succesvol toegevoegd aan de rol.']);
+
+        // Verstuur de gebruikersgegevens terug naar de client
+        return response()->json([
+            'success' => 'Gebruiker succesvol toegevoegd aan de rol.',
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ]
+        ]);
     }
 }

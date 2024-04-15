@@ -8,6 +8,27 @@ use App\Models\Role;
 
 class UserController extends Controller
 {
+
+    public function assignRole(Request $request)
+    {
+        // Valideer request data...
+        $user = User::where('email', $request->user_email)->firstOrFail();
+        $role = Role::findOrFail($request->role_id);
+        $user->roles()->attach($role);
+
+        return back()->with('success', 'Gebruiker toegevoegd aan rol.');
+    }
+
+    public function removeFromRole(Request $request)
+    {
+        // Valideer request data...
+        $user = User::findOrFail($request->user_id);
+        $role = Role::findOrFail($request->role_id);
+
+        $user->roles()->detach($role);
+
+        return back()->with('success', 'Gebruiker verwijderd uit rol.');
+    }
     public function search(Request $request)
     {
         $query = $request->q;

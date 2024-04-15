@@ -56,4 +56,7 @@ Route::delete('/remove-user-from-role', [WerknemersController::class, 'removeFro
     ->name('remove.user.from.role')
     ->middleware('role:manager');
 
+Route::post('/beheer/werknemers/assign-role', [WerknemersController::class, 'assignRole'])->name('assignRole');
+Route::delete('/beheer/werknemers/remove-role', [WerknemersController::class, 'removeFromRole'])->name('removeFromRole');
+
 require __DIR__ . '/auth.php';

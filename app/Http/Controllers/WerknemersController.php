@@ -46,15 +46,16 @@ class WerknemersController extends Controller
             $role = Role::findOrFail($request->role_id);
 
             if (!$user->roles()->where('role_id', $role->id)->exists()) {
-                return response()->json(['error' => 'Gebruiker heeft deze rol niet.'], 409);
+                return redirect()->back()->with('error', 'Gebruiker heeft deze rol niet.');
             }
 
             $user->roles()->detach($role);
-            return response()->json(['success' => 'Gebruiker succesvol verwijderd uit de rol.']);
+            return redirect()->back()->with('success', 'Gebruiker succesvol verwijderd uit de rol.');
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Serverfout: ' . $e->getMessage()], 500);
+            return redirect()->back()->with('error', 'Serverfout: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Store a newly created resource in storage.

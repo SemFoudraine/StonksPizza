@@ -24,23 +24,32 @@
                 </h5>
                 <ul id="role-users-{{ $role->id }}" class="mb-3 font-normal text-gray-700">
                     @foreach ($role->users as $user)
-                        <li class="flex items-center space-x-4">
-                            <span>{{ $user->name }} - {{ $user->email }}</span>
-                            <button onclick="removeUserFromRole('{{ $user->id }}', '{{ $role->id }}')"
-                                class="text-red-500 hover:text-red-700">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
+                    <li class="flex items-center justify-between bg-gray-100 rounded p-2">
+                        <span class="text-sm md:text-base truncate">{{ $user->name }} - {{ $user->email }}</span>
+                        <form action="{{ route('removeFromRole') }}" method="POST" class="ml-2">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="role_id" value="{{ $role->id }}">
+                            <input type="hidden" name="user_id" value="{{ $user->id }}">
+                            <button type="submit" class="text-red-500 hover:text-red-700">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </button>
-                        </li>
-                    @endforeach
+                        </form>
+                    </li>
+                @endforeach
                 </ul>
-                <button onclick="openModal('{{ $role->id }}')"
-                    class="px-3 py-2 text-sm font-medium text-center text-white bg-stonks-groen rounded-lg hover:bg-stonks-groen2 focus:ring-1 focus:outline-none focus:ring-stonks-groen2">
-                    Toevoegen
-                </button>
+                <div class="p-4 border-t border-gray-200">
+                    <form action="{{ route('assignRole') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="role_id" value="{{ $role->id }}">
+                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                            <input type="text" name="user_email" placeholder="Gebruiker e-mail" class="flex-1 px-4 py-2 border rounded">
+                            <button type="submit" class="px-4 py-2 bg-stonks-groen text-white rounded hover:bg-stonks-groen2">
+                                Toevoegen
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <div id="modal-{{ $role->id }}"
@@ -56,127 +65,8 @@
                 </div>
             </div>
         @endforeach
-
-        <script>
-            function openModal(roleId) {
-                document.getElementById('modal-' + roleId).classList.remove('hidden');
-            }
-
-            function closeModal(roleId) {
-                document.getElementById('modal-' + roleId).classList.add('hidden');
-            }
-
-            function searchUsers(query, roleId) {
-                fetch(`/search-users?q=${query}`)
-                    .then(response => response.json())
-                    .then(users => {
-                        const resultsContainer = document.getElementById('search-results-' + roleId);
-                        resultsContainer.innerHTML = '';
-                        users.forEach(user => {
-                            const li = document.createElement('li');
-                            li.textContent = `${user.name} - ${user.email} `;
-
-                            const addButton = document.createElement('button');
-                            addButton.textContent = 'Toevoegen';
-                            addButton.className =
-                                'ml-2 px-2 py-1 text-sm font-medium text-white bg-blue-500 rounded hover:bg-blue-600';
-                            addButton.onclick = () => addUserToRole(user.id, roleId);
-
-                            li.appendChild(addButton);
-                            resultsContainer.appendChild(li);
-                        });
-                    });
-            }
-
-            function addUserToRole(userId, roleId) {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                fetch('/add-user-to-role', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            user_id: userId,
-                            role_id: roleId
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error(response.statusText);
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            const roleList = document.querySelector(`#role-users-${roleId}`);
-                            const userCount = document.querySelector(`#user-count-${roleId}`);
-
-                            const newUserItem = document.createElement('li');
-                            newUserItem.className = 'flex items-center space-x-4';
-                            newUserItem.id = `user-item-${userId}-${roleId}`;
-                            newUserItem.innerHTML = `
-                <span>${data.user.name} - ${data.user.email}</span>
-                <button onclick="removeUserFromRole('${data.user.id}', '${roleId}')" class="text-red-500 hover:text-red-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            `;
-                            roleList.appendChild(newUserItem);
-                            userCount.textContent = parseInt(userCount.textContent) + 1;
-
-                            alert("Gebruiker toegevoegd aan de rol!");
-                            closeModal(roleId);
-                        } else {
-                            alert("Fout: " + data.error);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Er is een fout opgetreden: ' + error.message);
-                    });
-            }
-
-            function removeUserFromRole(userId, roleId) {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                fetch('/remove-user-from-role', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            user_id: userId,
-                            role_id: roleId
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error(response.statusText);
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            const userItem = document.querySelector(`#user-item-${userId}-${roleId}`);
-                            const userCount = document.querySelector(`#user-count-${roleId}`);
-
-                            if (userItem) {
-                                userItem.remove();
-                            }
-                            userCount.textContent = parseInt(userCount.textContent) - 1;
-
-                            alert("Gebruiker verwijderd uit de rol!");
-                        } else {
-                            alert("Fout: " + data.error);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Er is een fout opgetreden: ' + error.message);
-                    });
-            }
-        </script>
-
-    </section>
 </body>
 
 </html>
+
+

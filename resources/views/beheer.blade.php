@@ -33,7 +33,7 @@
 
         @if(auth()->user()->hasRole('manager'))
             <div class="max-w-4xl p-7 bg-white border border-gray-200 rounded-lg shadow">
-                <a href="#">
+                <a href="werknemers">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight"><i class='bx bxs-user mr-3'></i>Werknemers</h5>
                 </a>
                 <p class="mb-3 font-normal text-gray-700">Beheer werknemers, deze functie is alleen beschikbaar voor

@@ -56,7 +56,7 @@
                         </div>
                     </form>
                     <div id="modal-{{ $role->id }}"
-                        class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 h-full w-full flex items-center justify-center">
+                        class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 h-full w-full items-center justify-center">
                         <!-- Modal content -->
                         <div class="bg-white p-8 rounded-lg shadow-lg">
                             <h2 class="mb-4">Voeg een gebruiker toe aan {{ $role->name }}</h2>

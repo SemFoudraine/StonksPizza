@@ -36,7 +36,7 @@ class WerknemersController extends Controller
         $user->roles()->attach($role);
         return back()->with('success', 'Gebruiker toegevoegd aan rol.');
 
-        Log::info("Assign role called with:", $request->all());
+        // Log::info("Assign role called with:", $request->all());
     }
 
     public function removeFromRole(Request $request)

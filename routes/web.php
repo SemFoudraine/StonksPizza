@@ -25,7 +25,8 @@ Route::get('/', function () {
     return view('index');
 });
 
-// web.php of api.php
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+
 Route::get('/api/fetch-address', [AddressController::class, 'fetchAddress']);
 Route::get('/api/fetch-address', [RegisteredUserController::class, 'fetchAddress']);
 
@@ -45,6 +46,7 @@ Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
 Route::get('/api/test-address', [OrderController::class, 'testApi']);
 
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
 
 // ------------------------- Role Routes ------------------------- \\
 Route::get('/beheer', [BeheerController::class, 'index'])->name('beheer')->middleware('role:medewerker,manager,koerier');

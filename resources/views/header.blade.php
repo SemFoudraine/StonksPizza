@@ -7,6 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <a class="header-img-a" href="/"><img class="header-img" src="img/logo_bg.png" alt="logo"></a>
     <div id="header-links" class="header-links">
         {{-- Login --}}
@@ -35,49 +39,49 @@
         @endif
     </div>
 
-    <section id="cart-popup" class="shopping-cart">
+    <section id="cart-popup" class="shopping-cart bg-white p-4 rounded-lg shadow-md">
         <div class="cart">
-            <h1>Bestelling</h1>
+            <h1 class="text-lg font-bold mb-4">Bestelling</h1>
             <ul id="cart-items"></ul>
         </div>
-        <div class="contact-info"
-            style="background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">Contact Informatie</h1>
-            <form>
-                <input type="text" id="name" name="name" value="{{ auth()->user()->name ?? '' }}"
-                    placeholder="Voor- en Achternaam" style="{{ $inputStyle }}">
-                <input type="email" id="email" name="email" value="{{ auth()->user()->email ?? '' }}"
-                    placeholder="Email" style="{{ $inputStyle }}">
-                <input type="tel" id="phone" name="phone" value="{{ auth()->user()->phone ?? '' }}"
-                    placeholder="Telefoonnummer" style="{{ $inputStyle }}">
+        <div class="contact-info">
+            <h1 class="text-lg font-bold mb-4">Contact Informatie</h1>
+            <form id="order-form" onsubmit="return submitOrder();">
+                @csrf
+                <input type="text" id="name" name="name" value="{{ auth()->user()->name ?? '' }}" required
+                    placeholder="Voor- en Achternaam" class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
+                <input type="email" id="email" name="email" value="{{ auth()->user()->email ?? '' }}" required
+                    placeholder="Email" class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
+                <input type="tel" id="phone" name="phone" value="{{ auth()->user()->phone ?? '' }}" required
+                    placeholder="Telefoonnummer" class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
                 <input type="text" id="zip_code" name="zip_code" value="{{ auth()->user()->postcode ?? '' }}"
-                    placeholder="Postcode" style="{{ $inputStyle }}" onchange="fetchAddress()">
+                    required placeholder="Postcode" class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
                 <input type="text" id="house_number" name="house_number"
-                    value="{{ auth()->user()->huisnummer ?? '' }}" placeholder="Huisnummer"
-                    style="{{ $inputStyle }}" onchange="fetchAddress()">
+                    value="{{ auth()->user()->huisnummer ?? '' }}" required placeholder="Huisnummer"
+                    class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
                 <input type="text" id="city" name="city" value="{{ auth()->user()->woonplaats ?? '' }}"
-                    placeholder="Woonplaats" style="{{ $inputStyle }}">
-                <input type="text" id="street" name="street" value="{{ auth()->user()->adres ?? '' }}"
-                    placeholder="Straatnaam" style="{{ $inputStyle }}">
-            </form>
-            @guest
-                <p style="margin-top: 20px;">Je bent niet ingelogd. <a href="{{ route('login') }}"
-                        style="color: #007bff; text-decoration: none;">Log in</a> of <a href="{{ route('register') }}"
-                        style="color: #007bff; text-decoration: none;">registreer</a> om makkelijker te bestellen.</p>
-            @endguest
+                    required placeholder="Woonplaats" class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
+                <input type="text" id="street" name="street" value="{{ auth()->user()->adres ?? '' }}" required
+                    placeholder="Straatnaam" class="mb-2 p-2 border rounded" style="{{ $inputStyle }}">
 
-            <button id="closecart" onclick="closecart()">Sluiten</button>
+
         </div>
         <div class="summary">
-            <h1>Summary</h1>
+            <h1 class="text-lg font-bold mb-4">Samenvatting</h1>
             <div>
                 <div id="summary-items"></div>
-                <div class="test" style="position: fixed; margin-top: 8rem;">
-                    <p id="total-price"></p>
-                    <a href="/bedankt"><button class="order-button">Bestel Nu</button></a>
+                <div class="fixed mt-32">
+                    <p id="total-price" class="mb-4"></p>
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out shadow-md hover:shadow-lg active:bg-blue-800 focus:outline-none">
+                        Bestellen
+                    </button>
                 </div>
             </div>
+            </form>
+            <button id="closecart" onclick="closecart()">Sluiten</button>
         </div>
+
     </section>
 </header>
 
@@ -126,4 +130,31 @@
         postcodeField.addEventListener('input', fetchAddress);
         huisnummerField.addEventListener('input', fetchAddress);
     });
+
+    function submitOrder() {
+        event.preventDefault();
+
+        const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+        const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+        const formData = new FormData(document.getElementById('order-form'));
+        formData.append('cart', JSON.stringify(cart));
+        formData.append('total_price', total);
+
+        axios.post('/orders', formData, {
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(function(response) {
+                console.log(response.data); // Log server response
+                window.location.href = '/bedankt'; // Redirect to the thank you page
+            })
+            .catch(function(error) {
+                alert('Er is een fout opgetreden bij het plaatsen van de bestelling');
+                console.error(error);
+            });
+        return false;
+    }
 </script>

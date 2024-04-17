@@ -42,8 +42,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/menu', [PizzaController::class, 'index'])->name('menu');
 Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
 
-
-
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 // ------------------------- Role Routes ------------------------- \\
 Route::get('/beheer', [BeheerController::class, 'index'])->name('beheer')->middleware('role:medewerker,manager,koerier');

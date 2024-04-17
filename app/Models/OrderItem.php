@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class OrderItem extends Model
+{
+    protected $fillable = [
+        'order_id',
+        'pizza_name',
+        'price',
+        'quantity'
+    ];
+
+    // Relatie terug naar Order
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+}

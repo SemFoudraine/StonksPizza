@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,25 +55,24 @@
         }
 
         .payment-method {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.7rem;
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.7rem;
+        }
 
-.payment-method img {
-    max-width: 65px;
-    height: auto;
-}
-
+        .payment-method img {
+            max-width: 65px;
+            height: auto;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2485.5400829235423!2d5.494135711715193!3d51.46660011356612!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c6d8d46a1fd9a7%3A0x2683f0238844f87a!2sSumma%20College!5e0!3m2!1snl!2snl!4v1712739386876!5m2!1snl!2snl"
-                style="border:0; width:100%; height:200px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe id="googleMap" style="border:0; width:100%; height:200px;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
         <div class="message">
@@ -91,6 +91,34 @@
             <img class="header-img" src="img/contant.png" alt="logo">
         </div>
 
-    </div>
+        <h1>Bedankt voor je bestelling!</h1>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                function updateMap() {
+                    const latitude = sessionStorage.getItem('latitude');
+                    const longitude = sessionStorage.getItem('longitude');
+
+                    console.log('Nieuwe breedtegraad in sessionStorage:', sessionStorage.getItem('latitude'));
+                    console.log('Nieuwe lengtegraad in sessionStorage:', sessionStorage.getItem('longitude'));
+
+                    // Controleer of latitude en longitude gedefinieerd zijn voordat je de kaart bijwerkt
+                    if (latitude && longitude) {
+                        console.log("Attempting to update map with:", latitude, longitude);
+                        const apiKey = 'AIzaSyCcUU_2IudJMubc2UQW1yu9-HkWFy0u22c';
+                        const zoomLevel = 17;
+
+                        const iframeUrl =
+                            `https://www.google.com/maps/embed/v1/view?key=${apiKey}&center=${latitude},${longitude}&zoom=${zoomLevel}`;
+                        document.getElementById('googleMap').src = iframeUrl;
+                    } else {
+                        console.error("Latitude or longitude is not defined in sessionStorage.");
+                    }
+                }
+
+                updateMap(); // Roep de updateMap-functie aan bij het laden van de pagina
+            });
+        </script>
 </body>
+
 </html>

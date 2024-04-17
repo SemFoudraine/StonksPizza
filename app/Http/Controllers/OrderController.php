@@ -32,4 +32,13 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'Order successfully placed.'], 200);
     }
+
+    public function testApi() {
+        return response()->json([
+            'latitude' => '52.370216',
+            'longitude' => '4.895168',
+            'street' => 'Voorbeeldstraat',
+            'city' => 'Amsterdam'
+        ]);
+    }
 }

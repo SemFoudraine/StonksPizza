@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/menu', [PizzaController::class, 'index'])->name('menu');
 Route::get('/bedankt', [PizzaController::class, 'bedankt'])->name('bedankt');
 
+Route::get('/api/test-address', [OrderController::class, 'testApi']);
+
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 // ------------------------- Role Routes ------------------------- \\

@@ -26,8 +26,13 @@
         }
 
         .card-body p {
+            font-weight: 350;
+            font-size: 1rem;
             margin-bottom: 10px;
         }
+      #p-namen {
+        font-size: 1.1em;
+      }
 
         .card-body ul {
             margin-top: 10px;
@@ -42,7 +47,6 @@
         /* Aangepaste stijl voor de container */
         .container {
             margin-top: 7rem;
-            /* Hiermee wordt de ruimte tussen de header en de kaarten vergroot */
         }
     </style>
 </head>
@@ -57,15 +61,15 @@
             <div class="card-body">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <p><span class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
-                        <p><span class="font-semibold">Email:</span> {{ $order->customer_email }}</p>
-                        <p><span class="font-semibold">Adres:</span> {{ $order->address }}</p>
+                        <p><span  id="p-namen" class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
+                        <p><span id="p-namen"  class="font-semibold">Email:</span> {{ $order->customer_email }}</p>
+                        <p><span  id="p-namen" class="font-semibold">Adres:</span> {{ $order->address }}</p>
                     </div>
                     <div>
-                        <p><span class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}</p>
-                        <p><span class="font-semibold">Besteld op:</span>
+                        <p><span  id="p-namen" class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}</p>
+                        <p><span  id="p-namen"  class="font-semibold">Besteld op:</span>
                             {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
-                        <p><span class="font-semibold">Status:</span> {{ $order->status }}</p>
+                        <p><span id="p-namen"  class="font-semibold">Status:</span> {{ $order->status }}</p>
                     </div>
                 </div>
                 <hr class="my-4 border-gray-300">

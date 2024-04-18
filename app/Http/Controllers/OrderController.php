@@ -32,7 +32,11 @@ class OrderController extends Controller
         $orders = Order::orderBy('id', 'desc')->get();
         $orderItems = OrderItem::with('order')->get();
 
-        return view('beheer.bestellingen.orders', compact('orders', 'orderItems'));
+        return view('beheer.bestellingen.orders', [
+            'orders' => $orders,
+            'orderItems' => $orderItems,
+        ]);
+
     }
 
     public function updateStatus(Request $request, Order $order)

@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" />
     <script src="js/script.js"></script>
@@ -109,7 +109,8 @@
                     Bestelling #{{ $order->id }}
                 </h3>
             </div>
-            <div class="card-body">
+            <div class="card-body
+                @if($order->status === 'Bezorgd') hidden @endif"> <!-- Voeg hidden class toe als status 'Bezorgd' is -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <p><span  id="p-namen" class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
@@ -182,8 +183,18 @@
 </div>
 
 <script>
-    function toggleAllOrderItems(itemId) {
-        const orderItems = document.getElementById(itemId);
-        orderItems.classList.toggle('hidden');
+    window.onload = function() {
+        var orders = document.querySelectorAll('.card');
+
+        orders.forEach(function(order) {
+            var status = order.querySelector('.status-delivered');
+            var body = order.querySelector('.card-body');
+
+            if (status && body) {
+                if (status.textContent.trim() === 'Bezorgd') {
+                    body.classList.add('hidden');
+                }
+            }
+        });
     }
 </script>

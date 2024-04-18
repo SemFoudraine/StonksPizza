@@ -44,10 +44,51 @@
             margin-bottom: 5px;
         }
 
-        /* Aangepaste stijl voor de container */
         .container {
             margin-top: 7rem;
         }
+
+.status-received {
+    color: #007bff;
+}
+
+.status-preparing {
+    color: #dc3545;
+}
+
+.status-cooking {
+    color: #ffc107;
+}
+
+.status-ready {
+    color: #28a745;
+}
+
+.status-on-the-way {
+    color: #17a2b8;
+}
+
+.status-delivered {
+    color: #28a745;
+}
+
+
+        /* Bolletjes */
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .status-dot.received { background-color: #007bff; }
+        .status-dot.preparing { background-color: #dc3545; }
+        .status-dot.cooking { background-color: #ffc107; }
+        .status-dot.ready { background-color: #52c41a; }
+        .status-dot.on-the-way { background-color: #17a2b8; }
+        .status-dot.delivered { background-color: #52c41a; }
     </style>
 </head>
 
@@ -56,7 +97,17 @@
     @foreach ($orders as $order)
         <div class="card mb-4">
             <div class="card-header bg-gray-200 py-3">
-                <h3 class="text-lg font-semibold">Bestelling #{{ $order->id }}</h3>
+                <h3 class="text-lg font-semibold">
+                    <span class="status-dot
+                        @if($order->status === 'Ontvangen') received
+                        @elseif($order->status === 'Wordt bereid') preparing
+                        @elseif($order->status === 'In de oven') cooking
+                        @elseif($order->status === 'Klaar') ready
+                        @elseif($order->status === 'Onderweg') on-the-way
+                        @elseif($order->status === 'Bezorgd') delivered
+                        @endif"></span>
+                    Bestelling #{{ $order->id }}
+                </h3>
             </div>
             <div class="card-body">
                 <div class="grid grid-cols-2 gap-4">
@@ -69,7 +120,16 @@
                         <p><span  id="p-namen" class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}</p>
                         <p><span  id="p-namen"  class="font-semibold">Besteld op:</span>
                             {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
-                        <p><span id="p-namen"  class="font-semibold">Status:</span> {{ $order->status }}</p>
+                        <p><span id="p-namen"  class="font-semibold">Status:</span>
+                            <span class="font-semibold
+                                @if($order->status === 'Ontvangen') status-received
+                                @elseif($order->status === 'Wordt bereid') status-preparing
+                                @elseif($order->status === 'In de oven') status-cooking
+                                @elseif($order->status === 'Klaar') status-ready
+                                @elseif($order->status === 'Onderweg') status-on-the-way
+                                @elseif($order->status === 'Bezorgd') status-delivered
+                                @endif">{{ $order->status }}</span>
+                        </p>
                     </div>
                 </div>
                 <hr class="my-4 border-gray-300">

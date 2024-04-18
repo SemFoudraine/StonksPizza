@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = [
-        'customer_name',
-        'customer_email',
-        'address',  
-        'total_price'
-    ];
+    protected $fillable = ['customer_name', 'customer_email', 'address', 'total_price', 'user_id'];
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 
     // Relatie met OrderItem
     public function items()
@@ -19,4 +19,3 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 }
-

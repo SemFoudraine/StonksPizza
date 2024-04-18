@@ -6,12 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    protected $fillable = [
-        'order_id',
-        'pizza_id',
-        'price',
-        'quantity'
-    ];
+    protected $fillable = ['order_id', 'pizza_name', 'price', 'quantity'];
 
     // Relatie terug naar Order
     public function order()
@@ -24,5 +19,4 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Pizza::class);
     }
-
 }

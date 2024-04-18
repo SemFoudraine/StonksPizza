@@ -23,6 +23,24 @@ class OrderController extends Controller
 
         return view('orders', compact('orders', 'orderItems'));
     }
+
+    public function beheerIndex()
+    {
+        // Haal alle orders op, gesorteerd op id in aflopende volgorde
+        $orders = Order::orderBy('id', 'desc')->get();
+        $orderItems = OrderItem::with('order')->get();
+
+        return view('beheer.bestellingen.orders', compact('orders', 'orderItems'));
+    }
+
+    public function updateStatus(Request $request, Order $order)
+    {
+        $order->update([
+            'status' => $request->status
+        ]);
+
+        return back()->with('success', 'Status bijgewerkt.');
+    }
     public function store(Request $request)
     {
         $user = Auth::user();

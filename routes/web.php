@@ -62,4 +62,7 @@ Route::delete('/remove-user-from-role', [WerknemersController::class, 'removeFro
 Route::post('/beheer/werknemers/assign-role', [WerknemersController::class, 'assignRole'])->name('assignRole')->middleware('role:manager');
 Route::delete('/beheer/werknemers/remove-role', [WerknemersController::class, 'removeFromRole'])->name('removeFromRole')->middleware('role:manager');
 
+Route::get('/beheer/orders', [OrderController::class, 'beheerIndex'])->name('beheer.index')->middleware('role:medewerker,manager,koerier');
+Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update.status')->middleware('role:medewerker,manager,koerier');
+
 require __DIR__ . '/auth.php';

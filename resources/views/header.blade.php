@@ -179,12 +179,17 @@
                 sessionStorage.setItem('latitude', latitude);
                 sessionStorage.setItem('longitude', longitude);
 
+                // Leeg de winkelwagen
+                sessionStorage.removeItem("cart");
+                updateCartDisplay
+            (); // Zorg ervoor dat de UI ook geüpdatet wordt om de lege winkelwagen te reflecteren
+
                 window.location.href = '/bedankt'; // Redirect to the thank you page
             })
             .catch(function(error) {
                 alert('Er is een fout opgetreden bij het plaatsen van de bestelling');
                 console.error(error);
             });
-        return false;
+        return false; // Voorkom dat het formulier op de traditionele manier wordt ingediend
     }
 </script>

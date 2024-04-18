@@ -169,13 +169,22 @@ function updateCartDisplay() {
     cart.forEach((pizza, index) => {
         const cartItem = document.createElement("div");
         const middleLine = document.createElement("hr");
-        cartItem.classList.add("cartbox");
-        cartItem.innerHTML = `<h1>${pizza.name}</h1>
+        cartItem.classList.add("cartbox", "bg-white", "p-4", "shadow", "rounded-lg", "mb-4");
+        cartItem.innerHTML = `
+            <h1 class="text-lg font-bold">${pizza.name}</h1>
             <p>Size: ${pizza.size}</p>
             <p>Aanpassingen: ${pizza.customization}</p>
-            <p>Prijs: ${pizza.price} - Aantal: <input class="pizzaamount" min="1" type="number" name="${index}_size" value="${pizza.quantity}" id="${index}_size"></p>
-            <button onclick="updatePizza(${index})">Update</button>
-            <button onclick="deletePizza(${index})">Verwijder</button>`;
+            <div class="flex items-center justify-between">
+                <p>Prijs: ${pizza.price}</p>
+                <label class="flex items-center">Aantal:
+                    <input class="pizzaamount ml-2 w-16 p-1 border rounded" type="number" min="1" name="${index}_size" value="${pizza.quantity}" id="${index}_size">
+                </label>
+            </div>
+            <div class="flex space-x-2 mt-2">
+                <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" onclick="updatePizza(${index})">Update</button>
+                <button class="bg-red-100 hover:bg-red-200 text-red-800 font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" onclick="deletePizza(${index})">Verwijder</button>
+            </div>
+        `;
         cartItemsContainer.appendChild(cartItem);
         cartItemsContainer.appendChild(middleLine);
         const summaryItem = document.createElement("div");
@@ -188,13 +197,11 @@ function updateCartDisplay() {
     });
     cartCounter.textContent = totalPizzaCount;
     const priceSummary = document.createElement("div");
-    const orderbtn = document.createElement("div");
     priceSummary.classList.add("price-summary");
     priceSummary.innerHTML = `<p>Totaalprijs: $${totalPrice.toFixed(2)}</p>`;
 
     totalPriceContainer.innerHTML = "";
     totalPriceContainer.appendChild(priceSummary);
-    totalPriceContainer.appendChild(orderbtn);
 }
 
 

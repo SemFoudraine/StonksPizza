@@ -76,8 +76,8 @@
         </div>
 
         <div class="message">
-            <h2>Je bestelling wordt zo bezorgd</h2>
-            <p>Orient Express heeft bevestigd dat je bestelling snel bezorgd wordt.</p>
+            <h2>Je bestelling is ontvangen</h2>
+            <p>Dit is enkel een bevestiging dat de bestelling is ontvangen.</p>
         </div>
         <div class="button-container">
             <button class="button" data-tip="5">5% fooi</button>

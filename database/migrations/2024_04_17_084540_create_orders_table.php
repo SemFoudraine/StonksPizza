@@ -18,6 +18,13 @@ return new class extends Migration
             $table->string('address');
             $table->decimal('total_price', 8, 2);
             $table->timestamps();
+            $table->enum('status', [
+                'Ontvangen',
+                'Wordt bereid',
+                'In de oven',
+                'Onderweg',
+                'Bezorgd'
+            ])->default('Ontvangen')->after('total_price'); // Zorg dat je de plaatsing van de nieuwe kolom controleert
         });
     }
 

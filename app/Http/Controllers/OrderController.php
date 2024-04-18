@@ -33,6 +33,7 @@ class OrderController extends Controller
         $order->address = $request->street . ' ' . $request->house_number . ', ' . $request->zip_code . ' ' . $request->city;
         $order->total_price = $request->total_price;
         $order->user_id = $user->id;
+        $order->status = 'Ontvangen';
         $order->save();
 
         // Aannemende dat je de winkelwagenitems als JSON doorstuurt

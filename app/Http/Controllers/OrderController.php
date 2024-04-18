@@ -16,7 +16,7 @@ class OrderController extends Controller
         $user = Auth::user();
 
         // Haal alleen de bestellingen op die aan de ingelogde gebruiker zijn gekoppeld
-        $orders = $user->orders()->get();
+        $orders = Order::orderBy('id', 'desc')->where('user_id', $user->id)->get();
 
         // Haal alle order items op inclusief gerelateerde orders
         $orderItems = OrderItem::with('order')->get();

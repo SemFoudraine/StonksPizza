@@ -15,13 +15,13 @@
     <div id="header-links" class="header-links">
         {{-- Login --}}
         <a href="/">Home</a>
-        <a href="menu">Menu</a>
+        <a href="{{ route('menu') }}">Menu</a>
         @auth
             @php
                 $user = Auth::user();
             @endphp
             @if ($user->hasRole('medewerker') || $user->hasRole('manager') || $user->hasRole('koerier'))
-                <a href="/beheer">Beheer</a>
+                <a href="{{ route('beheer') }}">Beheer</a>
             @endif
         @endauth
 
@@ -34,8 +34,8 @@
         @if (Route::has('login') && Auth::check())
             <i class='bx bxs-user'></i><a href="{{ url('/dashboard') }}">{{ Auth::user()->name }}</a>
         @elseif (Route::has('login') && !Auth::check())
-            <a href="{{ url('/login') }}">Login</a>
-            <a href="{{ url('/register') }}">Registreer</a>
+            <a href="{{ route('login') }}">Login</a>
+            <a href="{{ route('register') }}">Registreer</a>
         @endif
     </div>
 

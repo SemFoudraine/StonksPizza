@@ -32,7 +32,7 @@
     </div>
     <div class="header-auth">
         @if (Route::has('login') && Auth::check())
-            <i class='bx bxs-user'></i><a href="{{ url('/dashboard') }}">{{ Auth::user()->name }}</a>
+            <i class='bx bxs-user'></i><a href="{{ route('orders.index') }}">{{ Auth::user()->name }}</a>
         @elseif (Route::has('login') && !Auth::check())
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Registreer</a>

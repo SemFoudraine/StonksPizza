@@ -30,9 +30,10 @@
             font-size: 1rem;
             margin-bottom: 10px;
         }
-      #p-namen {
-        font-size: 1.1em;
-      }
+
+        #p-namen {
+            font-size: 1.1em;
+        }
 
         .card-body ul {
             margin-top: 10px;
@@ -48,31 +49,6 @@
             margin-top: 7rem;
         }
 
-.status-received {
-    color: #007bff;
-}
-
-.status-preparing {
-    color: #dc3545;
-}
-
-.status-cooking {
-    color: #ffc107;
-}
-
-.status-ready {
-    color: #28a745;
-}
-
-.status-on-the-way {
-    color: #17a2b8;
-}
-
-.status-delivered {
-    color: #28a745;
-}
-
-
         /* Bolletjes */
         .status-dot {
             display: inline-block;
@@ -83,12 +59,33 @@
             vertical-align: middle;
         }
 
-        .status-dot.received { background-color: #007bff; }
-        .status-dot.preparing { background-color: #dc3545; }
-        .status-dot.cooking { background-color: #ffc107; }
-        .status-dot.ready { background-color: #52c41a; }
-        .status-dot.on-the-way { background-color: #17a2b8; }
-        .status-dot.delivered { background-color: #52c41a; }
+        .status-dot.received {
+            background-color: #007bff;
+        }
+
+        .status-dot.preparing {
+            background-color: #dc3545;
+        }
+
+        .status-dot.cooking {
+            background-color: #ffc107;
+        }
+
+        .status-dot.ready {
+            background-color: #52c41a;
+        }
+
+        .status-dot.on-the-way {
+            background-color: #17a2b8;
+        }
+
+        .status-dot.delivered {
+            background-color: #52c41a;
+        }
+
+        .status-dot.canceled {
+            background-color: #ff0000;
+        }
     </style>
 </head>
 
@@ -98,63 +95,72 @@
         <div class="card mb-4">
             <div class="card-header bg-gray-200 py-3">
                 <h3 class="text-lg font-semibold">
-                    <span class="status-dot
-                        @if($order->status === 'Ontvangen') received
+                    <span
+                        class="status-dot
+                        @if ($order->status === 'Ontvangen') received
                         @elseif($order->status === 'Wordt bereid') preparing
                         @elseif($order->status === 'In de oven') cooking
                         @elseif($order->status === 'Klaar') ready
                         @elseif($order->status === 'Onderweg') on-the-way
                         @elseif($order->status === 'Bezorgd') delivered
-                        @endif"></span>
+                        @elseif($order->status === 'Geannuleerd') canceled @endif"></span>
                     Bestelling #{{ $order->id }}
                 </h3>
             </div>
             <div class="card-body
-                @if($order->status === 'Bezorgd') hidden @endif"> <!-- Voeg hidden class toe als status 'Bezorgd' is -->
-                <div class="grid grid-cols-2 gap-4">
+                @if ($order->status === 'Bezorgd') hidden @endif">
+                <!-- Voeg hidden class toe als status 'Bezorgd' is -->
+                <div id="cardBody{{ $order->id }}" class="card-body grid grid-cols-2 gap-4 {{ $order->status === 'Bezorgd' ? 'hidden' : '' }}">
                     <div>
-                        <p><span  id="p-namen" class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
-                        <p><span id="p-namen"  class="font-semibold">Email:</span> {{ $order->customer_email }}</p>
-                        <p><span  id="p-namen" class="font-semibold">Adres:</span> {{ $order->address }}</p>
+                        <p><span id="p-namen" class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
+                        <p><span id="p-namen" class="font-semibold">Email:</span> {{ $order->customer_email }}</p>
+                        <p><span id="p-namen" class="font-semibold">Adres:</span> {{ $order->address }}</p>
                     </div>
                     <div>
-                        <p><span  id="p-namen" class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}</p>
-                        <p><span  id="p-namen"  class="font-semibold">Besteld op:</span>
+                        <p><span id="p-namen" class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}</p>
+                        <p><span id="p-namen" class="font-semibold">Besteld op:</span>
                             {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
-                            <form action="{{ route('orders.update.status', $order->id) }}" method="POST">
-                                @csrf
-                                @method('PATCH')
-                                <label for="status" class="font-semibold">Status:</label>
-                                <select name="status" onchange="this.form.submit()">
-                                    @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
-                                        <option value="Ontvangen" {{ $order->status == 'Ontvangen' ? 'selected' : '' }}>
-                                            Ontvangen</option>
+                        <form action="{{ route('orders.update.status', $order->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <label for="status" class="font-semibold">Status:</label>
+                            <select name="status" onchange="this.form.submit()">
+                                @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
+                                    <option value="Ontvangen" {{ $order->status == 'Ontvangen' ? 'selected' : '' }}>
+                                        Ontvangen</option>
 
-                                        <option value="Wordt bereid"
-                                            {{ $order->status == 'Wordt bereid' ? 'selected' : '' }}>
-                                            Wordt bereid</option>
-                                        <option value="In de oven" {{ $order->status == 'In de oven' ? 'selected' : '' }}>In
-                                            de
-                                            oven</option>
-                                    @endif
-                                    @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('koerier'))
-                                        <option value="Onderweg" {{ $order->status == 'Onderweg' ? 'selected' : '' }}>
-                                            Onderweg
-                                        </option>
-                                        <option value="Bezorgd" {{ $order->status == 'Bezorgd' ? 'selected' : '' }}>Bezorgd
-                                        </option>
-                                    @endif
-                                </select>
-                            </form>
-                        <p><span id="p-namen"  class="font-semibold">Status:</span>
-                            <span class="font-semibold
-                                @if($order->status === 'Ontvangen') status-received
-                                @elseif($order->status === 'Wordt bereid') status-preparing
-                                @elseif($order->status === 'In de oven') status-cooking
-                                @elseif($order->status === 'Klaar') status-ready
-                                @elseif($order->status === 'Onderweg') status-on-the-way
-                                @elseif($order->status === 'Bezorgd') status-delivered
-                                @endif">{{ $order->status }}</span>
+                                    <option value="Wordt bereid"
+                                        {{ $order->status == 'Wordt bereid' ? 'selected' : '' }}>
+                                        Wordt bereid</option>
+                                    <option value="In de oven" {{ $order->status == 'In de oven' ? 'selected' : '' }}>In
+                                        de
+                                        oven</option>
+                                @endif
+                                @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('koerier'))
+                                    <option value="Onderweg" {{ $order->status == 'Onderweg' ? 'selected' : '' }}>
+                                        Onderweg
+                                    </option>
+                                    <option value="Bezorgd" {{ $order->status == 'Bezorgd' ? 'selected' : '' }}>Bezorgd
+                                    </option>
+                                @endif
+                                @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
+                                    <option value="Geannuleerd"
+                                        {{ $order->status == 'Geannuleerd' ? 'selected' : '' }}>
+                                        Geannuleerd
+                                    </option>
+                                @endif
+                            </select>
+                        </form>
+                        <p><span id="p-namen" class="font-semibold">Status:</span>
+                            <span
+                                class="font-semibold
+                                @if ($order->status === 'Ontvangen') text-blue-500
+                                @elseif($order->status === 'Wordt bereid') text-red-500
+                                @elseif($order->status === 'In de oven') text-yellow-500
+                                @elseif($order->status === 'Klaar') text-green-500
+                                @elseif($order->status === 'Onderweg') text-orange-500
+                                @elseif($order->status === 'Bezorgd') text-green-500
+                                @elseif($order->status === 'Geannuleerd') text-red-500 @endif">{{ $order->status }}</span>
                         </p>
                     </div>
                 </div>
@@ -183,6 +189,16 @@
 </div>
 
 <script>
+    function toggleAllOrderItems(itemId) {
+        const orderItems = document.getElementById(itemId);
+        orderItems.classList.toggle('hidden');
+    }
+
+    function toggleCardVisibility(cardId) {
+        const cardBody = document.getElementById(cardId);
+        cardBody.classList.toggle('hidden');
+    }
+
     window.onload = function() {
         var orders = document.querySelectorAll('.card');
 

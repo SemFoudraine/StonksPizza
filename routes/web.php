@@ -26,6 +26,7 @@ Route::get('/', function () {
 });
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
 Route::get('/api/fetch-address', [AddressController::class, 'fetchAddress']);
 Route::get('/api/fetch-address', [RegisteredUserController::class, 'fetchAddress']);

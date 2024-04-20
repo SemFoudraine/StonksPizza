@@ -19,7 +19,7 @@ class OrderController extends Controller
 
         $orderItems = OrderItem::with('order')->get();
 
-        return view('orders',[
+        return view('orders', [
             'orders' => $orders,
             'orderItems' => $orderItems,
         ]);
@@ -36,7 +36,6 @@ class OrderController extends Controller
             'orders' => $orders,
             'orderItems' => $orderItems,
         ]);
-
     }
 
     public function updateStatus(Request $request, Order $order)
@@ -72,5 +71,14 @@ class OrderController extends Controller
         }
 
         return response()->json(['message' => 'Order successfully placed.'], 200);
+    }
+
+    public function cancel(Order $order)
+    {
+        $order->update([
+            'status' => 'Geannuleerd'
+        ]);
+
+        return back()->with('success', 'Bestelling geannuleerd.');
     }
 }

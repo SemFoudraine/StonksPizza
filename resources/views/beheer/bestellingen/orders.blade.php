@@ -9,7 +9,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" />
     <script src="js/script.js"></script>
     <title>Document</title>
-        <style>
+    <style>
         /* Custom styles for cards */
         .card {
             margin-bottom: 20px;
@@ -75,7 +75,7 @@
         }
 
         .canceled {
-            background-color: #ff0000;
+            background-color: #EF4444;
         }
     </style>
 </head>
@@ -85,7 +85,8 @@
     <div class="container mx-auto px-4">
         @foreach ($orders as $order)
             <div class="card mb-4">
-                <div class="card-header bg-gray-200 py-3">
+                <div
+                    class="card-header bg-gray-200 py-3 {{ $order->status === 'Geannuleerd' ? 'bg-red-500 text-white' : '' }}">
                     <h3 class="text-lg font-semibold">
                         <span
                             class="status-dot
@@ -96,7 +97,7 @@
                             @elseif($order->status === 'Onderweg') on-the-way
                             @elseif($order->status === 'Bezorgd') delivered
                             @elseif($order->status === 'Geannuleerd') canceled @endif"></span>
-                        Bestelling #{{ $order->id }}
+                        Bestelling #{{ $order->id }} {{ $order->status === 'Geannuleerd' ? '(Geannuleerd)' : '' }}
                     </h3>
                     <button class="toggle-button" onclick="toggleCardVisibility('cardBody{{ $order->id }}')"> <svg
                             class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -104,17 +105,17 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
                             </path>
                         </svg></button>
-
                 </div>
                 <div id="cardBody{{ $order->id }}"
-                    class="card-body grid grid-cols-2 gap-4 {{ $order->status === 'Delivered' ? 'hidden' : '' }}">
+                    class="card-body grid grid-cols-2 gap-4 {{ $order->status === 'Bezorgd' ? 'hidden' : '' }} {{ $order->status === 'Geannuleerd' ? 'hidden' : '' }}">
                     <div>
                         <p><span id="p-namen" class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
                         <p><span id="p-namen" class="font-semibold">Email:</span> {{ $order->customer_email }}</p>
                         <p><span id="p-namen" class="font-semibold">Adres:</span> {{ $order->address }}</p>
                     </div>
                     <div>
-                        <p><span id="p-namen" class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}</p>
+                        <p><span id="p-namen" class="font-semibold">Totaalprijs:</span> €{{ $order->total_price }}
+                        </p>
                         <p><span id="p-namen" class="font-semibold">Besteld op:</span>
                             {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
                         <form action="{{ route('orders.update.status', $order->id) }}" method="POST">

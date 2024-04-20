@@ -118,38 +118,43 @@
                         </p>
                         <p><span id="p-namen" class="font-semibold">Besteld op:</span>
                             {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
-                        <form action="{{ route('orders.update.status', $order->id) }}" method="POST">
-                            @csrf
-                            @method('PATCH')
-                            <label for="status" class="font-semibold">Status:</label>
-                            <select name="status" onchange="this.form.submit()">
-                                @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
-                                    <option value="Ontvangen" {{ $order->status == 'Ontvangen' ? 'selected' : '' }}>
-                                        Ontvangen</option>
+                        @if ($order->status === 'Ontvangen' || $order->status === 'Wordt bereid' || $order->status === 'In de oven' || $order->status === 'Klaar' || $order->status === 'Onderweg' || $order->status === 'Bezorgd')
+                            <form action="{{ route('orders.update.status', $order->id) }}" method="POST">
+                                @csrf
+                                @method('PATCH')
+                                <label for="status" class="font-semibold">Status:</label>
+                                <select name="status" onchange="this.form.submit()">
+                                    @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
+                                        <option value="Ontvangen"
+                                            {{ $order->status == 'Ontvangen' ? 'selected' : '' }}>
+                                            Ontvangen</option>
 
-                                    <option value="Wordt bereid"
-                                        {{ $order->status == 'Wordt bereid' ? 'selected' : '' }}>
-                                        Wordt bereid</option>
-                                    <option value="In de oven" {{ $order->status == 'In de oven' ? 'selected' : '' }}>
-                                        In
-                                        de
-                                        oven</option>
-                                @endif
-                                @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('koerier'))
-                                    <option value="Onderweg" {{ $order->status == 'Onderweg' ? 'selected' : '' }}>
-                                        Onderweg
-                                    </option>
-                                    <option value="Bezorgd" {{ $order->status == 'Bezorgd' ? 'selected' : '' }}>Bezorgd
-                                    </option>
-                                @endif
-                                @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
-                                    <option value="Geannuleerd"
-                                        {{ $order->status == 'Geannuleerd' ? 'selected' : '' }}>
-                                        Geannuleerd
-                                    </option>
-                                @endif
-                            </select>
-                        </form>
+                                        <option value="Wordt bereid"
+                                            {{ $order->status == 'Wordt bereid' ? 'selected' : '' }}>
+                                            Wordt bereid</option>
+                                        <option value="In de oven"
+                                            {{ $order->status == 'In de oven' ? 'selected' : '' }}>
+                                            In
+                                            de
+                                            oven</option>
+                                    @endif
+                                    @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager') || auth()->user()->hasRole('koerier'))
+                                        <option value="Onderweg" {{ $order->status == 'Onderweg' ? 'selected' : '' }}>
+                                            Onderweg
+                                        </option>
+                                        <option value="Bezorgd" {{ $order->status == 'Bezorgd' ? 'selected' : '' }}>
+                                            Bezorgd
+                                        </option>
+                                    @endif
+                                    @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
+                                        <option value="Geannuleerd"
+                                            {{ $order->status == 'Geannuleerd' ? 'selected' : '' }}>
+                                            Geannuleerd
+                                        </option>
+                                    @endif
+                                </select>
+                            </form>
+                        @endif
                         <p><span id="p-namen" class="font-semibold">Status:</span>
                             <span
                                 class="font-semibold

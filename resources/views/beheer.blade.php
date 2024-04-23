@@ -46,30 +46,32 @@
         @endif
 
         @if(auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
-            <div class="max-w-4xl p-7 bg-white border border-gray-200 rounded-lg shadow">
-                <a href="#">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight"><i
-                            class='bx bxs-pizza bx-flip-horizontal mr-3'></i>Pizza's</h5>
-                </a>
-                <p class="mb-3 font-normal text-gray-700">Beheer pizza's, deze functie is alleen beschikbaar voor
-                    managers
-                    en medewerkers. </p>
-                <a href="#"
-                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-stonks-groen rounded-lg hover:bg-stonks-groen2 hover:text-white focus:ring-2 focus:outline-none focus:ring-stonks-groen">
-                    Beheer
-                </a>
-            </div>
+        <div class="max-w-4xl p-7 bg-white border border-gray-200 rounded-lg shadow">
+            <a href="/beheer/pizzas">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight">
+                    <i class='bx bxs-pizza bx-flip-horizontal mr-3'></i>Pizza's
+                </h5>
+            </a>
+            <p class="mb-3 font-normal text-gray-700">
+                Beheer pizza's, deze functie is alleen beschikbaar voor managers en medewerkers.
+            </p>
+            <a href="/beheer/pizzas"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-stonks-groen rounded-lg hover:bg-stonks-groen2 hover:text-white focus:ring-2 focus:outline-none focus:ring-stonks-groen">
+                Beheer
+            </a>
+        </div>
         @endif
+
 
         @if(auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
             <div class="max-w-4xl p-7 bg-white border border-gray-200 rounded-lg shadow">
-                <a href="#">
+                <a href="/beheer/ingredient"">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight"><i class='bx bxs-food-menu mr-3'></i>Ingrediënten
                     </h5>
                 </a>
                 <p class="mb-3 font-normal text-gray-700">Beheer ingrediënten, deze functie is alleen beschikbaar voor
                     managers en medewerkers. </p>
-                <a href="#"
+                <a href="/beheer/ingredient"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-stonks-groen rounded-lg hover:bg-stonks-groen2 hover:text-white focus:ring-2 focus:outline-none focus:ring-stonks-groen">
                     Beheer
                 </a>

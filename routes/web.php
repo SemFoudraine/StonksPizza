@@ -9,6 +9,9 @@ use App\Http\Controllers\beheerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\WerknemersController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\Pizzascontroller;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +61,23 @@ Route::post('/add-user-to-role', [UserController::class, 'addToRole'])->name('us
 Route::delete('/remove-user-from-role', [WerknemersController::class, 'removeFromRole'])
     ->name('remove.user.from.role')
     ->middleware('role:manager');
+
+    Route::resource('beheer/ingredient', IngredientController::class)->only(['index', 'store', 'edit', 'update', 'destroy'])->middleware('role:manager');
+    Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');
+Route::delete('/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('ingredients.destroy');
+
+// Gebruik 'PizzasController' met hoofdletter 'C'
+Route::middleware(['auth', 'role:medewerker,manager'])->group(function () {
+    Route::get('/beheer/pizzas', [PizzasController::class, 'index'])->name('pizza.index');
+    Route::get('/beheer/pizzas/create', [PizzasController::class, 'create'])->name('pizza.create');
+    Route::post('/beheer/pizzas', [PizzasController::class, 'store'])->name('pizza.store');
+    Route::get('/beheer/pizzas/{pizza}', [PizzasController::class, 'show'])->name('pizza.show');
+    Route::get('/beheer/pizzas/{pizza}/edit', [PizzasController::class, 'edit'])->name('pizza.edit');
+    Route::put('/beheer/pizzas/{pizza}', [PizzasController::class, 'update'])->name('pizza.update');
+    Route::delete('/beheer/pizzas/{pizza}', [PizzasController::class, 'destroy'])->name('pizza.destroy');
+});
+
+
 
 Route::post('/beheer/werknemers/assign-role', [WerknemersController::class, 'assignRole'])->name('assignRole')->middleware('role:manager');
 Route::delete('/beheer/werknemers/remove-role', [WerknemersController::class, 'removeFromRole'])->name('removeFromRole')->middleware('role:manager');

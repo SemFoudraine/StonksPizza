@@ -230,3 +230,56 @@ function isValidQuantity(quantity) {
     return quantity >= 1 && quantity <= 99;
 }
 
+
+    let cartItems = [];
+    let totalPrice = 0;
+
+    function addToCart(button) {
+        let pizzaName = button.dataset.pizza.name;
+        let pizzaPrice = button.dataset.pizza.price;
+        let pizzaSize = document.getElementById('pizza-size').value;
+        let quantity = document.getElementById('pizza-quantity').value;
+        let customization = document.getElementById('pizza-customization').value;
+
+        let item = {
+            name: pizzaName,
+            size: pizzaSize,
+            price: pizzaPrice,
+            quantity: quantity,
+            customization: customization
+        };
+
+        cartItems.push(item);
+        updateCart();
+    }
+
+    function updateCart() {
+        let cartItemsList = document.getElementById('cart-items');
+        cartItemsList.innerHTML = '';
+
+        totalPrice = 0;
+
+        cartItems.forEach(item => {
+            let li = document.createElement('li');
+            li.textContent = `${item.quantity}x ${item.size} ${item.name} - ${item.customization} - $${item.price}`;
+            cartItemsList.appendChild(li);
+
+            totalPrice += (parseInt(item.price) * parseInt(item.quantity));
+        });
+
+        document.getElementById('total-price').textContent = `Totaalprijs: $${totalPrice.toFixed(2)}`;
+    }
+
+    function cancelOrder() {
+        cartItems = [];
+        updateCart();
+    }
+
+    function checkout() {
+        // Voeg hier de logica toe om de bestelling af te ronden
+        // Dit kan een redirect naar een betaalpagina zijn of een bevestigingsbericht
+        alert('Bestelling geplaatst! Bedankt voor uw aankoop.');
+        cartItems = [];
+        updateCart();
+    }
+

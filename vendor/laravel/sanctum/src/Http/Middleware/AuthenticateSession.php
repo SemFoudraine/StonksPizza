@@ -87,4 +87,14 @@ class AuthenticateSession
             "password_hash_{$guard}" => $request->user()->getAuthPassword(),
         ]);
     }
+
+    /**
+     * Get the post-authentication redirect path.
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        return route('index'); // Pas dit aan naar de naam van je indexroute
+    }
 }

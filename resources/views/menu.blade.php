@@ -32,9 +32,7 @@
                 </div>
             </div>
         </section>
-        <section id="pizza-popup" class="pizza-popup">                <label class="flex items-center">Aantal:
-            <input class="pizzaamount ml-2 w-16 p-1 border rounded" type="number" min="1" name="${index}_size" value="${pizza.quantity}" id="${index}_size">
-        </label>
+        <section id="pizza-popup" class="pizza-popup">
             <span onclick="closepizza()" class="close-popup">x</span>
             <h2 id="pizza-popup-title">Pizza Naam</h2>
             <label for="pizza-size">Formaat:</label>

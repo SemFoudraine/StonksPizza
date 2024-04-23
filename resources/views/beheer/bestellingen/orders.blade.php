@@ -10,6 +10,12 @@
     <script src="js/script.js"></script>
     <title>Document</title>
     <style>
+        body::after {
+            content: "";
+            display: block;
+            height: 1rem;
+        }
+
         /* Custom styles for cards */
         .card {
             margin-bottom: 20px;
@@ -106,9 +112,9 @@
                             </path>
                         </svg></button>
                 </div>
-                <div id="order{{ $order->id }}" class="{{ $order->status === 'Bezorgd' ? 'hidden' : '' }} {{ $order->status === 'Geannuleerd' ? 'hidden' : '' }}">
-                    <div id="cardBody{{ $order->id }}"
-                        class="card-body grid grid-cols-2 gap-4 ">
+                <div id="order{{ $order->id }}"
+                    class="{{ $order->status === 'Bezorgd' ? 'hidden' : '' }} {{ $order->status === 'Geannuleerd' ? 'hidden' : '' }}">
+                    <div id="cardBody{{ $order->id }}" class="card-body grid grid-cols-2 gap-4 ">
                         <div>
                             <p><span id="p-namen" class="font-semibold">Naam:</span> {{ $order->customer_name }}</p>
                             <p><span id="p-namen" class="font-semibold">Email:</span> {{ $order->customer_email }}</p>
@@ -215,7 +221,8 @@
 
         function toggleOrderVisibility(orderId) {
             const order = document.getElementById(orderId);
-            order.classList.toggle('hidden');}
+            order.classList.toggle('hidden');
+        }
     </script>
 </body>
 

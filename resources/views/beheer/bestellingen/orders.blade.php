@@ -131,8 +131,7 @@
                                     $order->status === 'Wordt bereid' ||
                                     $order->status === 'In de oven' ||
                                     $order->status === 'Klaar' ||
-                                    $order->status === 'Onderweg' ||
-                                    $order->status === 'Bezorgd')
+                                    $order->status === 'Onderweg')
                                 <form action="{{ route('orders.update.status', $order->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')

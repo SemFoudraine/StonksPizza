@@ -12,25 +12,30 @@ class OrderController extends Controller
 {
     public function index()
     {
-        // Haal de ingelogde gebruiker op
+
         $user = Auth::user();
 
-        // Haal alleen de bestellingen op die aan de ingelogde gebruiker zijn gekoppeld
         $orders = Order::orderBy('id', 'desc')->where('user_id', $user->id)->get();
 
-        // Haal alle order items op inclusief gerelateerde orders
         $orderItems = OrderItem::with('order')->get();
 
-        return view('orders', compact('orders', 'orderItems'));
+        return view('orders', [
+            'orders' => $orders,
+            'orderItems' => $orderItems,
+        ]);
     }
+
 
     public function beheerIndex()
     {
-        // Haal alle orders op, gesorteerd op id in aflopende volgorde
+
         $orders = Order::orderBy('id', 'desc')->get();
         $orderItems = OrderItem::with('order')->get();
 
-        return view('beheer.bestellingen.orders', compact('orders', 'orderItems'));
+        return view('beheer.bestellingen.orders', [
+            'orders' => $orders,
+            'orderItems' => $orderItems,
+        ]);
     }
 
     public function updateStatus(Request $request, Order $order)
@@ -54,7 +59,6 @@ class OrderController extends Controller
         $order->status = 'Ontvangen';
         $order->save();
 
-        // Aannemende dat je de winkelwagenitems als JSON doorstuurt
         $cartItems = json_decode($request->cart, true);
         foreach ($cartItems as $item) {
             $orderItem = new OrderItem([
@@ -67,5 +71,14 @@ class OrderController extends Controller
         }
 
         return response()->json(['message' => 'Order successfully placed.'], 200);
+    }
+
+    public function cancel(Order $order)
+    {
+        $order->update([
+            'status' => 'Geannuleerd'
+        ]);
+
+        return back()->with('success', 'Bestelling geannuleerd.');
     }
 }

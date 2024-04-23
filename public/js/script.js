@@ -114,7 +114,7 @@ function addtocart(button) {
     const pizzaNameElement = document.querySelector('.pizza-card.selected .pizza-name');
     const pizzaName = pizzaNameElement.textContent;
     const pizzaPriceElement = document.querySelector('.pizza-card.selected .pizza-price');
-    const pizzaPrice = parseFloat(pizzaPriceElement.textContent.replace('$', ''));
+    const pizzaPrice = parseFloat(pizzaPriceElement.textContent.replace('€', ''));
     const pizzaCustomization = customization.trim() === '' ? 'Niks' : customization;
     const pizza = {
         name: pizzaName,
@@ -175,11 +175,11 @@ function updateCartDisplay() {
             <p>Size: ${pizza.size}</p>
             <p>Aanpassingen: ${pizza.customization}</p>
             <div class="flex items-center justify-between">
-                <p>Prijs: ${pizza.price}</p>
-                <label class="flex items-center">Aantal:
-                    <input class="pizzaamount ml-2 w-16 p-1 border rounded" type="number" min="1" name="${index}_size" value="${pizza.quantity}" id="${index}_size">
-                </label>
+                <p>Prijs: €${pizza.price}</p>
             </div>
+            <label class="flex items-center">Aantal:
+            <input class="pizzaamount ml-2 w-16 p-1 border rounded" type="number" min="1" name="${index}_size" value="${pizza.quantity}" id="${index}_size">
+        </label>
             <div class="flex space-x-2 mt-2">
                 <button class="bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" onclick="updatePizza(${index})">Update</button>
                 <button class="bg-red-100 hover:bg-red-200 text-red-800 font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline" onclick="deletePizza(${index})">Verwijder</button>
@@ -190,7 +190,7 @@ function updateCartDisplay() {
         const summaryItem = document.createElement("div");
         summaryItem.classList.add("summary-item");
         const totalItemPrice = parseFloat(pizza.price) * parseInt(pizza.quantity);
-        summaryItem.innerHTML = `<p>${pizza.quantity}x ${pizza.name} - ${pizza.size} - $${totalItemPrice.toFixed(2)}</p>`;
+        summaryItem.innerHTML = `<p>${pizza.quantity}x ${pizza.name} - ${pizza.size} - €${totalItemPrice.toFixed(2)}</p>`;
         summaryItemsContainer.appendChild(summaryItem);
         totalPizzaCount += parseInt(pizza.quantity);
         totalPrice += totalItemPrice;
@@ -198,7 +198,7 @@ function updateCartDisplay() {
     cartCounter.textContent = totalPizzaCount;
     const priceSummary = document.createElement("div");
     priceSummary.classList.add("price-summary");
-    priceSummary.innerHTML = `<p>Totaalprijs: $${totalPrice.toFixed(2)}</p>`;
+    priceSummary.innerHTML = `<p>Totaalprijs: €${totalPrice.toFixed(2)}</p>`;
 
     totalPriceContainer.innerHTML = "";
     totalPriceContainer.appendChild(priceSummary);

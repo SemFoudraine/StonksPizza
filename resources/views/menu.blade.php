@@ -22,7 +22,7 @@
                         <div class="pizza-details">
                             <h2 class="pizza-name">{{ $pizza->name }}</h2>
                             <p class="pizza-description">{{ $pizza->description }}</p>
-                            <p class="pizza-price">${{ $pizza->price }}</p>
+                            <p class="pizza-price">€{{ $pizza->price }}</p>
                             <label for="pizza-quantity">Aantal:</label>
                             <input type="number" class="pizza-quantity" id="pizza-quantity" value="1" min="1" max="99" data-quantity="{{ $pizza->quantity }}">
                             <button onclick="openpizza(this)" class="order-button" data-pizza="{{ $pizza->name }}">Bestel Nu</button>
@@ -32,7 +32,9 @@
                 </div>
             </div>
         </section>
-        <section id="pizza-popup" class="pizza-popup">
+        <section id="pizza-popup" class="pizza-popup">                <label class="flex items-center">Aantal:
+            <input class="pizzaamount ml-2 w-16 p-1 border rounded" type="number" min="1" name="${index}_size" value="${pizza.quantity}" id="${index}_size">
+        </label>
             <span onclick="closepizza()" class="close-popup">x</span>
             <h2 id="pizza-popup-title">Pizza Naam</h2>
             <label for="pizza-size">Formaat:</label>

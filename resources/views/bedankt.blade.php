@@ -16,6 +16,11 @@
             align-items: center;
             height: 100vh;
         }
+        .BedanktH1{
+            margin-bottom: 9%;
+            font-size: 1.60rem;
+            font-weight: bold;
+        }
 
         .container {
             background-color: #ffffff;
@@ -37,7 +42,7 @@
         }
 
         .button {
-            background-color: #4CAF50;
+            background-color: #4CAF50; /* Opvallende kleur */
             border: none;
             color: white;
             padding: 10px 20px;
@@ -47,11 +52,12 @@
             font-size: 16px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s; /* Overgangseffecten toegevoegd */
         }
 
         .button:hover {
-            background-color: #45a049;
+            background-color: #45a049; /* Opvallende kleur bij hover */
+            transform: scale(1.05); /* Inspringend effect bij hover */
         }
 
         .payment-method {
@@ -91,7 +97,8 @@
             <img class="header-img" src="img/contant.png" alt="logo">
         </div>
 
-        <h1>Bedankt voor je bestelling!</h1>
+        <h1 class="BedanktH1">Bedankt voor je bestelling!</h1>
+        <button class="button" onclick="window.location.href='/orders'">Bekijk hier je bestelling</button>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {

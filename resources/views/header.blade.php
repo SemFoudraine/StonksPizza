@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <a class="header-img-a" href="/"><img class="header-img" src="img/logo_bg.png" alt="logo"></a>
+    <a class="header-img-a" href="/"><img class="header-img" src="../img/logo_bg.png" alt="logo"></a>
     <div id="header-links" class="header-links">
         {{-- Login --}}
         <a href="/">Home</a>
@@ -32,7 +32,21 @@
     </div>
     <div class="header-auth">
         @if (Route::has('login') && Auth::check())
-            <i class='bx bxs-user'></i><a href="{{ url('/dashboard') }}">{{ Auth::user()->name }}</a>
+            <div class="dropdown">
+                <button class="dropbtn"><i class='bx bxs-user mr-2'></i>{{ Auth::user()->name }}</button>
+                <div class="dropdown-content">
+                    <a href="{{ route('orders.index') }}">Bestellingen</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('logout')"
+                            onclick="event.preventDefault();
+                                            this.closest('form').submit();">
+                            {{ __('Uitloggen') }}
+                        </x-responsive-nav-link>
+                    </form>
+                </div>
+            </div>
         @elseif (Route::has('login') && !Auth::check())
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Registreer</a>
@@ -182,7 +196,7 @@
                 // Leeg de winkelwagen
                 sessionStorage.removeItem("cart");
                 updateCartDisplay
-            (); // Zorg ervoor dat de UI ook geüpdatet wordt om de lege winkelwagen te reflecteren
+                    (); // Zorg ervoor dat de UI ook geüpdatet wordt om de lege winkelwagen te reflecteren
 
                 window.location.href = '/bedankt'; // Redirect to the thank you page
             })
@@ -193,3 +207,47 @@
         return false; // Voorkom dat het formulier op de traditionele manier wordt ingediend
     }
 </script>
+
+<style>
+    .dropbtn {
+        color: black;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        border-radius: 6px;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #f1f1f1
+    }
+
+    /* Show the dropdown menu on hover */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>

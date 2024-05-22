@@ -97,7 +97,9 @@
         @endguest
 
         @if ($orders->isEmpty())
-            <p class="text-center text-gray-500">Geen bestellingen gevonden.</p>
+            @auth
+                <p class="text-center text-gray-500">Geen bestellingen gevonden.</p>
+            @endauth
         @else
             @foreach ($orders as $order)
                 <div class="card mb-4">

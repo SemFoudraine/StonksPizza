@@ -10,12 +10,19 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-
         $user = Auth::user();
+        $email = $request->input('email');
 
-        $orders = Order::orderBy('id', 'desc')->where('user_id', $user->id)->get();
+        // Fetch orders based on user ID or email address
+        if ($user) {
+            $orders = Order::orderBy('id', 'desc')->where('user_id', $user->id)->get();
+        } elseif ($email) {
+            $orders = Order::orderBy('id', 'desc')->where('customer_email', $email)->get();
+        } else {
+            $orders = collect(); // Empty collection if no user or email
+        }
 
         $orderItems = OrderItem::with('order')->get();
 
@@ -48,18 +55,24 @@ class OrderController extends Controller
     }
     public function store(Request $request)
     {
+        // Check if the user is authenticated
         $user = Auth::user();
 
+        // Create a new order instance
         $order = new Order();
         $order->customer_name = $request->name;
         $order->customer_email = $request->email;
         $order->address = $request->street . ' ' . $request->house_number . ', ' . $request->zip_code . ' ' . $request->city;
         $order->total_price = $request->total_price;
-        $order->user_id = $user->id;
+        // Set the user_id to null if the user is not authenticated
+        $order->user_id = $user ? $user->id : null;
         $order->status = 'Ontvangen';
         $order->save();
 
+        // Decode the cart items from the request
         $cartItems = json_decode($request->cart, true);
+
+        // Iterate through each cart item and save it as an OrderItem
         foreach ($cartItems as $item) {
             $orderItem = new OrderItem([
                 'order_id' => $order->id,
@@ -70,6 +83,7 @@ class OrderController extends Controller
             $orderItem->save();
         }
 
+        // Return a success response
         return response()->json(['message' => 'Order successfully placed.'], 200);
     }
 

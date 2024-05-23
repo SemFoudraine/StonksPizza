@@ -147,7 +147,7 @@
                                 €{{ $order->total_price }}
                             </p>
                             <p><span id="p-namen" class="font-semibold">Besteld op:</span>
-                                {{ $order->created_at->format('d-m-Y H:i:s') }}</p>
+                                {{ $order->created_at->format('d-m-Y') }}</p>
                             <p><span id="p-namen" class="font-semibold">Status:</span>
                                 <span
                                     class="font-semibold

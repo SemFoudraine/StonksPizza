@@ -16,6 +16,20 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+/* Stijlen voor de checkboxes */
+.ingredient-checkbox {
+    margin-bottom: 0.5rem; /* Ruimte tussen checkboxes */
+}
+
+.ingredient-checkbox input[type="checkbox"] {
+    display: inline-block;
+    margin-right: 0.5rem; /* Ruimte tussen checkbox en label */
+}
+
+.ingredient-checkbox label {
+    display: inline-block;
+    vertical-align: middle;
+}
 
 body {
     background-color: #faf9f6;

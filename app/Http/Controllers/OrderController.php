@@ -64,6 +64,7 @@ class OrderController extends Controller
         $order->customer_email = $request->email;
         $order->address = $request->street . ' ' . $request->house_number . ', ' . $request->zip_code . ' ' . $request->city;
         $order->total_price = $request->total_price;
+
         // Set the user_id to null if the user is not authenticated
         $order->user_id = $user ? $user->id : null;
         $order->status = 'Ontvangen';
@@ -84,14 +85,16 @@ class OrderController extends Controller
 
             // Handle ingredients
             if (isset($item['ingredients']) && is_array($item['ingredients'])) {
-                foreach ($item['ingredients'] as $ingredient) {
-                    $orderItem->ingredients()->attach($ingredient['id']);
+                foreach ($item['ingredients'] as $ingredientId) {
+                    // Attach the ingredient to the order item
+                    $orderItem->ingredients()->attach($ingredientId);
                 }
             }
         }
 
         // Return a success response
         return response()->json(['message' => 'Order successfully placed.'], 200);
+
     }
 
     public function cancel(Order $order)

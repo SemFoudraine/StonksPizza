@@ -41,12 +41,17 @@
                 <option value="{{ $size }}">{{ ucfirst($size) }}</option>
                 @endforeach
             </select>
-            <label for="ingredients">Kies ingrediënten:</label>
-            <select name="ingredients[]" id="ingredients" multiple>
+            <label for="ingredients" style="margin-bottom: 10px;">Kies ingrediënten:</label>
+            <div class="ingredient-checkboxes">
                 @foreach($ingredients as $ingredient)
-                <option value="{{ $ingredient->name }}">{{ $ingredient->name }}</option>
+                <div class="ingredient-checkbox">
+                    <label>{{ $ingredient->name }}</label>
+                    <input type="checkbox" name="ingredients[]" id="{{ $ingredient->name }}" value="{{ $ingredient->name }}">
+                </div>
                 @endforeach
-            </select>
+            </div>
+
+
             <label for="pizza-customization">Aanpassingen:</label>
             <input type="text" id="pizza-customization" placeholder="Typ hier de aanpassingen...">
             <button onclick="addtocart(this)">Toevoegen aan winkelwagen</button>

@@ -109,7 +109,8 @@ function addtocart(button) {
     const customization = document.getElementById("pizza-customization").value;
     const pizzaNameElement = document.querySelector('.pizza-card.selected .pizza-name');
     const pizzaName = pizzaNameElement.textContent;
-    const selectedIngredients = Array.from(document.getElementById('ingredients').selectedOptions).map(option => option.value);
+    const selectedIngredients = Array.from(document.querySelectorAll('.ingredient-checkboxes input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+
     const pizzaPriceElement = document.querySelector('.pizza-card.selected .pizza-price');
     const pizzaPrice = parseFloat(pizzaPriceElement.textContent.replace('€', ''));
     const pizzaCustomization = customization.trim() === '' ? 'Niks' : customization;

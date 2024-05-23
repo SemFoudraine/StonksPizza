@@ -137,11 +137,13 @@
                                     @method('PATCH')
                                     <label for="status" class="font-semibold">Status:</label>
                                     <select name="status" onchange="this.form.submit()">
+                                        @if (auth()->user()->hasRole('koerier'))
+                                            <option value="status">Status</option>
+                                        @endif
                                         @if (auth()->user()->hasRole('medewerker') || auth()->user()->hasRole('manager'))
                                             <option value="Ontvangen"
                                                 {{ $order->status == 'Ontvangen' ? 'selected' : '' }}>
                                                 Ontvangen</option>
-
                                             <option value="Wordt bereid"
                                                 {{ $order->status == 'Wordt bereid' ? 'selected' : '' }}>
                                                 Wordt bereid</option>

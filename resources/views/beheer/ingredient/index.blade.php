@@ -103,26 +103,28 @@
 
             <label for="name">Naam:</label>
             <input type="text" id="name" name="name" value="{{ isset($editingIngredient) ? $editingIngredient->name : '' }}" required>
+            <label for="price">Prijs:</label>
+            <input type="number" id="price" name="price" value="{{ isset($editingIngredient) ? $editingIngredient->price : '' }}" step="0.01" required>
             <button type="submit">{{ isset($editingIngredient) ? 'Bijwerken' : 'Toevoegen' }}</button>
             @if(isset($editingIngredient))
             <button type="button" onclick="cancelEdit()">Annuleren</button>
             @endif
         </form>
 
-        <!-- Lijst van bestaande ingrediënten -->
-        <ul>
-            @foreach ($ingredients as $ingredient)
-            <li>
-                {{ $ingredient->name }}
-                <form class="inline" action="{{ route('ingredients.destroy', $ingredient->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete">Verwijderen</button>
-                </form>
-                <button type="button" onclick="editIngredient({{ $ingredient }})" class="edit">Bewerken</button>
-            </li>
-            @endforeach
-        </ul>
+<ul>
+    @foreach ($ingredients as $ingredient)
+    <li>
+        {{ $ingredient->name }} - €{{ $ingredient->price }}
+        <form class="inline" action="{{ route('ingredients.destroy', $ingredient->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="delete">Verwijderen</button>
+        </form>
+        <button type="button" onclick="editIngredient({{ $ingredient }})" class="edit">Bewerken</button>
+    </li>
+    @endforeach
+</ul>
+
     </div>
 
     <script>

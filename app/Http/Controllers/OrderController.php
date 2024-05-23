@@ -81,6 +81,13 @@ class OrderController extends Controller
                 'quantity' => $item['quantity']
             ]);
             $orderItem->save();
+
+            // Handle ingredients
+            if (isset($item['ingredients']) && is_array($item['ingredients'])) {
+                foreach ($item['ingredients'] as $ingredient) {
+                    $orderItem->ingredients()->attach($ingredient['id']);
+                }
+            }
         }
 
         // Return a success response

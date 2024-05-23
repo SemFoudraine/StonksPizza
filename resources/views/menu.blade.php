@@ -24,7 +24,7 @@
                             <p class="pizza-description">{{ $pizza->description }}</p>
                             <p class="pizza-price">€{{ $pizza->price }}</p>
                             <label for="pizza-quantity">Aantal:</label>
-                            <input type="number" class="pizza-quantity" id="pizza-quantity" value="1" min="1" max="99" data-quantity="{{ $pizza->quantity }}">
+                            <input type="number" class="pizza-quantity" value="1" min="1" max="99">
                             <button onclick="openpizza(this)" class="order-button" data-pizza="{{ $pizza->name }}">Bestel Nu</button>
                         </div>
                     </div>
@@ -39,6 +39,12 @@
             <select id="pizza-size">
                 @foreach ($pizza_sizes as $size)
                 <option value="{{ $size }}">{{ ucfirst($size) }}</option>
+                @endforeach
+            </select>
+            <label for="ingredients">Kies ingrediënten:</label>
+            <select name="ingredients[]" id="ingredients" multiple>
+                @foreach($ingredients as $ingredient)
+                <option value="{{ $ingredient->name }}">{{ $ingredient->name }}</option>
                 @endforeach
             </select>
             <label for="pizza-customization">Aanpassingen:</label>

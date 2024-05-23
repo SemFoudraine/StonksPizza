@@ -96,23 +96,20 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
 function addtocart(button) {
-    // Haal de hoeveelheid op van de input binnen de geselecteerde pizza-card
     const pizzaQuantityElement = document.querySelector('.pizza-card.selected .pizza-quantity');
     const quantity = parseInt(pizzaQuantityElement.value, 10);
 
-    // Controleer of de hoeveelheid geldig is
     if (!isValidQuantity(quantity)) {
         alert('Voer een waarde in tussen 1 en 99.');
-        return; // Stop de functie als de hoeveelheid niet geldig is
+        return;
     }
 
-    // Alles hieronder blijft ongewijzigd ten opzichte van de bestaande functie
     const pizzaSize = document.getElementById("pizza-size").value;
     const customization = document.getElementById("pizza-customization").value;
     const pizzaNameElement = document.querySelector('.pizza-card.selected .pizza-name');
     const pizzaName = pizzaNameElement.textContent;
+    const selectedIngredients = Array.from(document.getElementById('ingredients').selectedOptions).map(option => option.value);
     const pizzaPriceElement = document.querySelector('.pizza-card.selected .pizza-price');
     const pizzaPrice = parseFloat(pizzaPriceElement.textContent.replace('€', ''));
     const pizzaCustomization = customization.trim() === '' ? 'Niks' : customization;
@@ -120,40 +117,28 @@ function addtocart(button) {
         name: pizzaName,
         size: pizzaSize,
         customization: pizzaCustomization,
-        quantity: quantity, // Gebruik de gevalideerde hoeveelheid
+        quantity: quantity,
+        ingredients: selectedIngredients,
         price: pizzaPrice
     };
-    const popup = document.createElement('div');
-    popup.classList.add('popup');
-    popup.textContent = `Toegevoegd: ${pizza.quantity}x ${pizza.name}`;
-    document.body.appendChild(popup);
 
-    setTimeout(() => {
-        popup.classList.add('hidden')
-        setTimeout(() => {
-            popup.remove();
-        }, 4000);
-    }, 4000);
-
-    let cart = [];
-    if (sessionStorage.getItem("cart")) {
-        cart = JSON.parse(sessionStorage.getItem("cart"));
-    }
+    let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
     let pizzaExists = false;
+
     cart.forEach((item) => {
         if (item.name === pizza.name && item.size === pizza.size && item.customization === pizza.customization) {
             item.quantity += pizza.quantity;
             pizzaExists = true;
         }
     });
+
     if (!pizzaExists) {
         cart.push(pizza);
     }
+
     sessionStorage.setItem("cart", JSON.stringify(cart));
-    document.getElementById("pizza-size").value = "small";
-    document.getElementById("pizza-customization").value = "";
-    closepizza();
     updateCartDisplay();
+    closepizza(); // Sluit de pop-up na het toevoegen aan de winkelwagen
 }
 
 function updateCartDisplay() {
@@ -174,6 +159,7 @@ function updateCartDisplay() {
             <h1 class="text-lg font-bold">${pizza.name}</h1>
             <p>Size: ${pizza.size}</p>
             <p>Aanpassingen: ${pizza.customization}</p>
+            <p>Ingrediënten: ${pizza.ingredients.join(', ')}</p>
             <div class="flex items-center justify-between">
                 <p>Prijs: €${pizza.price}</p>
             </div>
@@ -190,7 +176,7 @@ function updateCartDisplay() {
         const summaryItem = document.createElement("div");
         summaryItem.classList.add("summary-item");
         const totalItemPrice = parseFloat(pizza.price) * parseInt(pizza.quantity);
-        summaryItem.innerHTML = `<p>${pizza.quantity}x ${pizza.name} - ${pizza.size} - €${totalItemPrice.toFixed(2)}</p>`;
+        summaryItem.innerHTML = `<p>${pizza.quantity}x ${pizza.name} - ${pizza.size} - Ingrediënten: ${pizza.ingredients.join(', ')} - €${totalItemPrice.toFixed(2)}</p>`;
         summaryItemsContainer.appendChild(summaryItem);
         totalPizzaCount += parseInt(pizza.quantity);
         totalPrice += totalItemPrice;
@@ -204,6 +190,25 @@ function updateCartDisplay() {
     totalPriceContainer.appendChild(priceSummary);
 }
 
+function isValidQuantity(quantity) {
+    return quantity > 0 && quantity <= 99;
+}
+
+function openpizza(button) {
+    const pizzaCard = button.closest('.pizza-card');
+    pizzaCard.classList.add('selected');
+    const pizzaName = button.getAttribute('data-pizza');
+    document.getElementById('pizza-popup-title').textContent = pizzaName;
+    document.getElementById('pizza-popup').style.display = 'block';
+}
+
+function closepizza() {
+    const selectedPizzaCard = document.querySelector('.pizza-card.selected');
+    if (selectedPizzaCard) {
+        selectedPizzaCard.classList.remove('selected');
+    }
+    document.getElementById('pizza-popup').style.display = 'none';
+}
 
 function deletePizza(index) {
     let cart = JSON.parse(sessionStorage.getItem("cart")) || [];

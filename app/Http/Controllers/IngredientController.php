@@ -16,23 +16,26 @@ class IngredientController extends Controller
     {
         $ingredient = new Ingredient();
         $ingredient->name = $request->name;
+        $ingredient->price = $request->price;
         $ingredient->save();
 
         return redirect()->route('ingredient.index')->with('success', 'Ingrediënt is toegevoegd!');
     }
+    public function update(Request $request, Ingredient $ingredient)
+    {
+        $ingredient->name = $request->name;
+        $ingredient->price = $request->price;
+        $ingredient->save();
+
+        return redirect()->route('ingredient.index')->with('success', 'Ingrediënt is bijgewerkt!');
+    }
+
 
     public function edit(Ingredient $ingredient)
     {
         return view('beheer.ingredient.edit', compact('ingredient'));
     }
 
-    public function update(Request $request, Ingredient $ingredient)
-    {
-        $ingredient->name = $request->name;
-        $ingredient->save();
-
-        return redirect()->route('ingredient.index')->with('success', 'Ingrediënt is bijgewerkt!');
-    }
 
     public function destroy(Ingredient $ingredient)
     {

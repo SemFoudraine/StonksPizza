@@ -1,15 +1,19 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class Pizza extends Model
 {
-    protected $fillable = ['name', 'description', 'image', 'price', 'calories', 'sizes'];
+    use HasFactory;
+
+    protected $fillable = ['name', 'description', 'price', 'calories', 'image', 'ingredients'];
+
+    public function pizzas()
+    {
+        return $this->belongsToMany(Pizza::class)->withTimestamps();
+    }
+
 }

@@ -3,7 +3,7 @@
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PizzaController;
+use App\Http\Controllers\Pizzacontroller;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\beheerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
@@ -11,7 +11,7 @@ use App\Http\Controllers\WerknemersController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\Pizzascontroller;
-
+use App\Http\Controllers\Cartcontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,10 +74,11 @@ Route::middleware(['auth', 'role:medewerker,manager'])->group(function () {
     Route::post('/beheer/pizzas', [PizzasController::class, 'store'])->name('pizza.store');
     Route::get('/beheer/pizzas/{pizza}', [PizzasController::class, 'show'])->name('pizza.show');
     Route::get('/beheer/pizzas/{pizza}/edit', [PizzasController::class, 'edit'])->name('pizza.edit');
-    Route::put('/beheer/pizzas/{pizza}', [PizzasController::class, 'update'])->name('pizza.update');
+    Route::match(['put', 'post'], '/beheer/pizzas/{pizza}', [PizzasController::class, 'update'])->name('pizza.update');
     Route::delete('/beheer/pizzas/{pizza}', [PizzasController::class, 'destroy'])->name('pizza.destroy');
 });
 
+Route::post('/add-to-cart', [CartController::class, 'addToCart']);
 
 
 Route::post('/beheer/werknemers/assign-role', [WerknemersController::class, 'assignRole'])->name('assignRole')->middleware('role:manager');

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pizza;
-
+use App\Models\Ingredient;
 class Pizzacontroller extends Controller
 {
 
@@ -13,10 +13,29 @@ class Pizzacontroller extends Controller
 
     public function index()
     {
-        $pizzas = Pizza::all(); // Haal alle pizza's op uit de database
-        $pizza_sizes = ['small', 'medium', 'large']; // Definieer de beschikbare maten
+        $pizzas = Pizza::all();
+        $pizza_sizes = ['small', 'medium', 'large'];
+        $ingredients = Ingredient::all();
 
-        return view('menu', compact('pizzas', 'pizza_sizes')); // Geef zowel $pizzas als $pizza_sizes door aan de view
+        return view('menu', compact('pizzas', 'pizza_sizes', 'ingredients'));
+    }
+
+    public function addToCart(Request $request)
+    {
+        $data = $request->all();
+
+        // Valideer de data hier indien nodig
+
+        // Verwerk en sla de pizza gegevens op
+        $pizza = new Pizza();
+        $pizza->name = $data['name'];
+        $pizza->size = $data['size'];
+        $pizza->customization = $data['customization'];
+        $pizza->price = $data['price'];
+        $pizza->ingredients = json_encode($data['ingredients']);
+        $pizza->save();
+
+        return response()->json(['success' => true]);
     }
 
 

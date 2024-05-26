@@ -7,6 +7,9 @@ class CreateIngredientsTable extends Migration
 {
     public function up()
     {
+        Schema::dropIfExists('ingredients');
+
+        Schema::dropIfExists('ingredient_pizza');
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
             $table->string('name');

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Pizza;
 
 class OrderController extends Controller
 {
@@ -85,17 +86,19 @@ class OrderController extends Controller
 
             // Handle ingredients
             if (isset($item['ingredients']) && is_array($item['ingredients'])) {
-                foreach ($item['ingredients'] as $ingredientId) {
-                    // Attach the ingredient to the order item
-                    $orderItem->ingredients()->attach($ingredientId);
+                // Find the pizza by its name
+                $pizza = Pizza::where('name', $item['name'])->first();
+                if ($pizza) {
+                    // Attach the ingredients to the order item
+                    $pizza->ingredients()->attach($item['ingredients']);
                 }
             }
         }
 
         // Return a success response
         return response()->json(['message' => 'Order successfully placed.'], 200);
-
     }
+
 
     public function cancel(Order $order)
     {

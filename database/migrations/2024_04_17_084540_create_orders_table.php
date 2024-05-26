@@ -24,7 +24,7 @@ return new class extends Migration
                 'In de oven',
                 'Onderweg',
                 'Bezorgd'
-            ])->default('Ontvangen')->after('total_price'); // Zorg dat je de plaatsing van de nieuwe kolom controleert
+            ])->default('Ontvangen'); // Zorg dat je de plaatsing van de nieuwe kolom controleert
         });
     }
 

@@ -9,11 +9,17 @@ class Pizza extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'calories', 'image', 'ingredients'];
+    protected $fillable = ['name', 'description', 'price', 'calories', 'image'];
 
-    public function pizzas()
+
+    public function ingredients()
     {
-        return $this->belongsToMany(Pizza::class)->withTimestamps();
+        return $this->belongsToMany(Ingredient::class);
     }
 
+
+    public function Orderitem()
+    {
+        return $this->belongsTo(OrderItem::class);
+    }
 }

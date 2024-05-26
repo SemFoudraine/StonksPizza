@@ -8,15 +8,15 @@ class OrderItem extends Model
 {
     protected $fillable = ['order_id', 'pizza_name', 'price', 'quantity'];
 
-    // Relatie terug naar Order
+    // Relatie met Order
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
 
-    // Relatie naar Pizza
-    public function pizza()
+    // Relatie met Ingredients
+    public function ingredients()
     {
-        return $this->belongsTo(Pizza::class);
+        return $this->belongsToMany(Ingredient::class)->withTimestamps();
     }
 }

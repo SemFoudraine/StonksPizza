@@ -195,8 +195,7 @@
 
                 // Leeg de winkelwagen
                 sessionStorage.removeItem("cart");
-                updateCartDisplay
-                    (); // Zorg ervoor dat de UI ook geüpdatet wordt om de lege winkelwagen te reflecteren
+                updateCartDisplay(); // Zorg ervoor dat de UI ook geüpdatet wordt om de lege winkelwagen te reflecteren
 
                 window.location.href = '/bedankt'; // Redirect to the thank you page
             })

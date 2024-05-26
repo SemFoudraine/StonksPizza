@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->json('ingredients');
             $table->integer('calories');
+            $table->foreignId('pizza_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 

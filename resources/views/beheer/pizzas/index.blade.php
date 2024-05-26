@@ -9,7 +9,7 @@
     <script src="js/script.js"></script>
     <title>Document</title>
     <style>
-        body {
+      body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             margin: 0;
@@ -23,10 +23,6 @@
         }
 
         .pizza-container {
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
         }
@@ -165,26 +161,25 @@
                             <p class="pizza-description">{{ $pizza->description }}</p>
                             <p class="pizza-price">€{{ $pizza->price }}</p>
                             <button onclick="editPizza('{{ $pizza->id }}', '{{ $pizza->name }}', '{{ $pizza->description }}', '{{ $pizza->price }}', '{{ $pizza->calories }}')" class="order-button" data-pizza="{{ $pizza->name }}">Pas nu aan</button>
-                           <div class="delete-button">
-                            <form method="POST" action="{{ route('pizza.destroy', ['pizza' => $pizza->id]) }}" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Weet je zeker dat je deze pizza wilt verwijderen?')">Verwijder</button>
-                            </form>
-                           </div>
+                            <div class="delete-button">
+                                <form method="POST" action="{{ route('pizza.destroy', ['pizza' => $pizza->id]) }}" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('Weet je zeker dat je deze pizza wilt verwijderen?')">Verwijder</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     @endforeach
-
                 </div>
             </div>
         </section>
 
-        <section id="editPizzaForm" style="display: none;">
+        <section id="editPizzaForm">
             <h2>Bewerk Pizza</h2>
-            <form id="editForm" method="POST" action="{{ route('pizza.update', ['pizza' => $pizza->id]) }}">
+            <form id="editForm" method="POST" action="">
                 @csrf
-                @method('PUT') <!-- Voeg deze regel toe om de PUT-methode te gebruiken -->
+                @method('PUT')
                 <input type="hidden" id="pizzaId" name="pizzaId">
                 <label for="pizzaName">Naam:</label>
                 <input type="text" id="pizzaName" name="name" required>
@@ -198,7 +193,7 @@
                 </select>
                 <label for="pizzaPrice">Prijs:</label>
                 <input type="number" id="pizzaPrice" name="price" min="0" step="0.01" required>
-                <label for="pizzaCalories">Calories:</label>
+                <label for="pizzaCalories">Calorieën:</label>
                 <input type="number" id="pizzaCalories" name="calories" min="0" step="1">
                 <button type="submit">Opslaan</button>
             </form>
@@ -245,23 +240,21 @@
     @include('footer')
 
     <script>
-   function editPizza(id, name, description, price, calories, ingredients) {
-    document.getElementById('pizzaId').value = id;
-    document.getElementById('pizzaName').value = name;
-    document.getElementById('pizzaDescription').value = description;
-    document.getElementById('pizzaPrice').value = price;
-    document.getElementById('pizzaCalories').value = calories;
+        function toggleAddPizzaForm() {
+            var addPizzaForm = document.getElementById('addPizzaForm');
+            addPizzaForm.style.display = addPizzaForm.style.display === 'none' || addPizzaForm.style.display === '' ? 'block' : 'none';
+        }
 
-    // Zorg ervoor dat de ingrediënten correct worden ingesteld
-    var ingredientsSelect = document.getElementById('pizzaIngredients');
-    for (var i = 0; i < ingredientsSelect.options.length; i++) {
-        ingredientsSelect.options[i].selected = ingredients.includes(parseInt(ingredientsSelect.options[i].value));
-    }
+        function editPizza(id, name, description, price, calories) {
+            document.getElementById('pizzaId').value = id;
+            document.getElementById('pizzaName').value = name;
+            document.getElementById('pizzaDescription').value = description;
+            document.getElementById('pizzaPrice').value = price;
+            document.getElementById('pizzaCalories').value = calories;
 
-    document.getElementById('editForm').setAttribute('action', '/beheer/pizzas/' + id); // Update the form action
-    document.getElementById('editPizzaForm').style.display = 'block';
-}
-
+            document.getElementById('editForm').setAttribute('action', '/beheer/pizzas/' + id);
+            document.getElementById('editPizzaForm').style.display = 'block';
+        }
     </script>
 </body>
 

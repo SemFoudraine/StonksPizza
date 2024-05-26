@@ -14,6 +14,18 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.log("not on homepage");
     }
+
+    const pizzaCards = document.querySelectorAll(".pizza-card");
+    pizzaCards.forEach(function (card) {
+        card.addEventListener("click", function () {
+            pizzaCards.forEach(function (card) {
+                card.classList.remove("selected");
+            });
+            card.classList.add("selected");
+        });
+    });
+
+    updateCartDisplay();
 });
 
 function cardclicked() {

@@ -1,18 +1,23 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ingredient extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'price'];
 
-    protected $fillable = ['name'];
+    public $timestamps = false;
 
-    public function ingredients()
+    public function pizzas()
     {
-        return $this->belongsToMany(Ingredient::class)->withTimestamps();
+        return $this->belongsToMany(Pizza::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->belongsToMany(OrderItem::class);
     }
 
 }

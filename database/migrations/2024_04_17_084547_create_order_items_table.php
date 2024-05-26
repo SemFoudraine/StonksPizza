@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->string('pizza_name');
             $table->decimal('price', 8, 2);
+            $table->foreignId('pizza_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
             $table->timestamps();
         });

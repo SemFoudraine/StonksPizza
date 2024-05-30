@@ -14,12 +14,10 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
-        $email = $request->input('email');
+        $email = $user ? $user->email : $request->input('email');
 
-        // Fetch orders based on user ID or email address
-        if ($user) {
-            $orders = Order::orderBy('id', 'desc')->where('user_id', $user->id)->get();
-        } elseif ($email) {
+        // Fetch orders based on user email address
+        if ($email) {
             $orders = Order::orderBy('id', 'desc')->where('customer_email', $email)->get();
         } else {
             $orders = collect(); // Empty collection if no user or email
@@ -32,7 +30,6 @@ class OrderController extends Controller
             'orderItems' => $orderItems,
         ]);
     }
-
 
     public function beheerIndex()
     {

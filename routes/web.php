@@ -3,15 +3,15 @@
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Pizzacontroller;
+use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\AddressController;
-use App\Http\Controllers\beheerController;
+use App\Http\Controllers\BeheerController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\WerknemersController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\IngredientController;
-use App\Http\Controllers\Pizzascontroller;
-use App\Http\Controllers\Cartcontroller;
+use App\Http\Controllers\PizzasController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,20 +51,19 @@ Route::get('/api/test-address', [OrderController::class, 'testApi']);
 
 Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
-
 // ------------------------- Role Routes ------------------------- \\
 Route::get('/beheer', [BeheerController::class, 'index'])->name('beheer')->middleware('role:medewerker,manager,koerier');
 Route::get('/werknemers', [WerknemersController::class, 'index'])->name('werknemers')->middleware('role:manager');
 
 Route::get('/search-users', [UserController::class, 'search'])->name('users.search')->middleware('role:manager');
 Route::post('/add-user-to-role', [UserController::class, 'addToRole'])->name('users.add-to-role')->middleware('role:manager');
-// web.php
+
 Route::delete('/remove-user-from-role', [WerknemersController::class, 'removeFromRole'])
     ->name('remove.user.from.role')
     ->middleware('role:manager');
 
-    Route::resource('beheer/ingredient', IngredientController::class)->only(['index', 'store', 'edit', 'update', 'destroy'])->middleware('role:manager');
-    Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');
+Route::resource('beheer/ingredient', IngredientController::class)->only(['index', 'store', 'edit', 'update', 'destroy'])->middleware('role:manager');
+Route::post('/ingredients', [IngredientController::class, 'store'])->name('ingredients.store');
 Route::delete('/ingredients/{ingredient}', [IngredientController::class, 'destroy'])->name('ingredients.destroy');
 
 // Gebruik 'PizzasController' met hoofdletter 'C'
@@ -79,7 +78,6 @@ Route::middleware(['auth', 'role:medewerker,manager'])->group(function () {
 });
 
 Route::post('/add-to-cart', [CartController::class, 'addToCart']);
-
 
 Route::post('/beheer/werknemers/assign-role', [WerknemersController::class, 'assignRole'])->name('assignRole')->middleware('role:manager');
 Route::delete('/beheer/werknemers/remove-role', [WerknemersController::class, 'removeFromRole'])->name('removeFromRole')->middleware('role:manager');

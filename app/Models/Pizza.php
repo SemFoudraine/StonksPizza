@@ -11,15 +11,8 @@ class Pizza extends Model
 
     protected $fillable = ['name', 'description', 'price', 'calories', 'image'];
 
-
     public function ingredients()
     {
         return $this->belongsToMany(Ingredient::class);
-    }
-
-
-    public function Orderitem()
-    {
-        return $this->belongsTo(OrderItem::class);
     }
 }

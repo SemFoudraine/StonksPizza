@@ -1,19 +1,22 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pizza;
 use App\Models\Ingredient;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
-class Pizzascontroller extends Controller
+class PizzasController extends Controller
 {
     public function index()
-{
-    $pizzas = Pizza::with('ingredients')->get();
-    $ingredients = Ingredient::all();
-    return view('beheer.pizzas.index', compact('pizzas', 'ingredients'));
-}
+    {
+        $pizzas = Pizza::with('ingredients')->get();
+        $ingredients = Ingredient::all();
+        return view('beheer.pizzas.index', compact('pizzas', 'ingredients'));
+    }
 
     public function create()
     {
@@ -32,15 +35,39 @@ class Pizzascontroller extends Controller
             'ingredients' => 'required|array'
         ]);
 
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->storeAs('public/images', $imageName);
+        try {
+            // Upload the image to public/img
+            $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+            $path = $request->file('image')->move(public_path('img'), $imageName);
 
-        $pizza = new Pizza($request->only(['name', 'description', 'price', 'calories']));
-        $pizza->image = $imageName;
-        $pizza->save();
-        $pizza->ingredients()->attach($request->ingredients);
+            // Log uploaded image name and path
+            Log::info('Image uploaded: ' . $imageName . ' to path: ' . $path);
 
-        return redirect()->route('pizza.index')->with('success', 'Pizza is succesvol aangemaakt.');
+            // Save the pizza
+            $pizza = new Pizza($request->only(['name', 'description', 'price', 'calories']));
+            $pizza->image = 'img/' . $imageName;
+
+            // Log pizza data before save
+            Log::info('Pizza data before save: ', $pizza->toArray());
+
+            $pizza->save();
+
+            // Log pizza save success
+            Log::info('Pizza saved: ' . $pizza->id);
+
+            // Attach ingredients
+            $pizza->ingredients()->attach($request->ingredients);
+
+            // Log ingredient attachment
+            Log::info('Ingredients attached to pizza: ' . $pizza->id);
+
+            return redirect()->route('pizza.index')->with('success', 'Pizza is succesvol aangemaakt.');
+        } catch (\Exception $e) {
+            // Log the error message
+            Log::error('Error saving pizza: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Er is een fout opgetreden bij het opslaan van de pizza.');
+        }
     }
 
     public function show($id)
@@ -58,6 +85,8 @@ class Pizzascontroller extends Controller
 
     public function update(Request $request, $id)
     {
+        $pizza = Pizza::findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -67,24 +96,49 @@ class Pizzascontroller extends Controller
             'ingredients' => 'required|array'
         ]);
 
-        $pizza = Pizza::findOrFail($id);
-        $pizza->update($request->only(['name', 'description', 'price', 'calories']));
+        $pizza->name = $request->name;
+        $pizza->description = $request->description;
+        $pizza->price = $request->price;
+        $pizza->calories = $request->calories;
 
         if ($request->hasFile('image')) {
-            $imageName = time().'.'.$request->image->extension();
+            // Delete old image
+            if ($pizza->image) {
+                Storage::delete('public/images/' . $pizza->image);
+            }
+            // Upload new image
+            $imageName = time() . '.' . $request->image->extension();
             $request->image->storeAs('public/images', $imageName);
             $pizza->image = $imageName;
         }
 
-        $pizza->ingredients()->sync($request->ingredients);
         $pizza->save();
 
-        return redirect()->route('pizza.index')->with('success', 'Pizza is succesvol bijgewerkt.');
+        // Sync ingredients
+        $pizza->ingredients()->sync($request->ingredients);
+
+        return redirect()->route('pizza.index')->with('success', 'Pizza succesvol bijgewerkt.');
     }
 
-    public function destroy(Pizza $pizza)
+    public function destroy($id)
     {
-        $pizza->delete();
-        return redirect()->route('pizza.index')->with('success', 'Pizza is succesvol verwijderd.');
+        try {
+            $pizza = Pizza::findOrFail($id);
+
+            // Detach all related ingredients
+            $pizza->ingredients()->detach();
+
+            // Delete the pizza image
+            if ($pizza->image) {
+                Storage::delete('public/images/' . $pizza->image);
+            }
+
+            // Delete the pizza
+            $pizza->delete();
+
+            return redirect()->route('pizza.index')->with('success', 'Pizza succesvol verwijderd.');
+        } catch (\Exception $e) {
+            return redirect()->route('pizza.index')->with('error', 'Er is een fout opgetreden bij het verwijderen van de pizza.');
+        }
     }
 }

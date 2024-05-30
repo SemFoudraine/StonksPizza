@@ -18,7 +18,7 @@
                 <div class="pizza-container">
                     @foreach ($pizzas as $pizza)
                     <div class="pizza-card">
-                        <img src="img/{{ $pizza->image }}" alt="{{ $pizza->name }}">
+                        <img src="{{ asset($pizza->image) }}" alt="{{ $pizza->name }}">
                         <div class="pizza-details">
                             <h2 class="pizza-name">{{ $pizza->name }}</h2>
                             <p class="pizza-description">{{ $pizza->description }}</p>

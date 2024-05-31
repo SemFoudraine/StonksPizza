@@ -154,6 +154,28 @@ function addtocart(button) {
     closepizza(); // Sluit de pop-up na het toevoegen aan de winkelwagen
 }
 
+function updateMap(latitude, longitude) {
+    console.log("Updating map to:", latitude, longitude);
+
+    if (!latitude || !longitude) {
+        console.error("Latitude or longitude is undefined or incorrect.");
+        return;
+    }
+    var apiKey = 'AIzaSyCcUU_2IudJMubc2UQW1yu9-HkWFy0u22c';
+    var zoomLevel = 15;
+    var googleMapIframe = document.getElementById('googleMap');
+
+    if (googleMapIframe) {
+        var iframeUrl =
+            `https://www.google.com/maps/embed/v1/view?key=${apiKey}&center=${latitude},${longitude}&zoom=${zoomLevel}`;
+        googleMapIframe.src = iframeUrl;
+    } else {
+        console.error('Element with id "googleMap" not found.');
+    }
+}
+
+
+
 function updateCartDisplay() {
     const cartItemsContainer = document.getElementById("cart-items");
     const summaryItemsContainer = document.getElementById("summary-items");
@@ -240,6 +262,43 @@ function updatePizza(index) {
 document.addEventListener("DOMContentLoaded", function () {
     updateCartDisplay();
 });
+function submitOrder() {
+    event.preventDefault();
+
+    const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+    const formData = new FormData(document.getElementById('order-form'));
+    formData.append('cart', JSON.stringify(cart));
+    formData.append('total_price', total);
+
+    axios.post('/orders', formData, {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+    .then(function(response) {
+        console.log(response.data);
+
+        const latitude = document.getElementById('latitude').value;
+        const longitude = document.getElementById('longitude').value;
+
+        sessionStorage.setItem('latitude', latitude);
+        sessionStorage.setItem('longitude', longitude);
+
+        sessionStorage.removeItem("cart");
+        updateCartDisplay();
+
+        window.location.href = '/bedankt';
+    })
+    .catch(function(error) {
+        alert('Er is een fout opgetreden bij het plaatsen van de bestelling');
+        console.error(error);
+    });
+
+    return false;
+}
 
 
 //
@@ -249,8 +308,8 @@ function isValidQuantity(quantity) {
 }
 
 
-    let cartItems = [];
-    let totalPrice = 0;
+    //let cartItems = [];
+   // let totalPrice = 0;
 
     function addToCart(button) {
         let pizzaName = button.dataset.pizza.name;

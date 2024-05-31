@@ -10,14 +10,9 @@ class Ingredient extends Model
 
     public $timestamps = false;
 
-    public function pizzas()
-    {
-        return $this->belongsToMany(Pizza::class);
-    }
-
     public function orderItems()
     {
-        return $this->belongsToMany(OrderItem::class);
+        return $this->belongsToMany(OrderItem::class, 'ingredient_pizza', 'ingredient_id', 'order_item_id');
     }
-
 }
+

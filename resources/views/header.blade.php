@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.1/dist/tailwind.min.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <a class="header-img-a" href="/"><img class="header-img" src="{{ asset('img/logo_bg.png') }}" alt="logo"></a>
+    <a class="header-img-a" href="/"><img class="header-img" src="../img/logo_bg.png" alt="logo"></a>
     <div id="header-links" class="header-links">
         {{-- Login --}}
         <a href="/">Home</a>

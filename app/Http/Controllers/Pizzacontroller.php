@@ -24,19 +24,24 @@ class Pizzacontroller extends Controller
     {
         $data = $request->all();
 
-        // Valideer de data hier indien nodig
+        // Controleer eerst of de sessie variabele cart bestaat
+        $cart = session()->get('cart', []);
 
-        // Verwerk en sla de pizza gegevens op
-        $pizza = new Pizza();
-        $pizza->name = $data['name'];
-        $pizza->size = $data['size'];
-        $pizza->customization = $data['customization'];
-        $pizza->price = $data['price'];
-        $pizza->ingredients = json_encode($data['ingredients']);
-        $pizza->save();
+        // Voeg de ontvangen pizza toe aan de winkelwagen
+        $cart[] = [
+            'name' => $data['name'],
+            'size' => $data['size'],
+            'customization' => $data['customization'],
+            'price' => $data['price'],
+            'ingredients' => $data['ingredients']
+        ];
+
+        // Sla de bijgewerkte winkelwagen op in de sessie variabele cart
+        session()->put('cart', $cart);
 
         return response()->json(['success' => true]);
     }
+
 
 
     public function bedankt()

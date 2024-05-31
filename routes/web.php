@@ -29,6 +29,8 @@ Route::get('/', function () {
 });
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
 Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
 Route::get('/api/fetch-address', [AddressController::class, 'fetchAddress']);
@@ -84,5 +86,7 @@ Route::delete('/beheer/werknemers/remove-role', [WerknemersController::class, 'r
 
 Route::get('/beheer/orders', [OrderController::class, 'beheerIndex'])->name('beheer.index')->middleware('role:medewerker,manager,koerier');
 Route::patch('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update.status')->middleware('role:medewerker,manager,koerier');
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
+
 
 require __DIR__ . '/auth.php';
